@@ -1,6 +1,8 @@
 import { pool } from '../db/pool';
 import IQuery from '../interfaces/query.interface';
-import User from '../models/user.model';
+import User from '../models/user/user.model';
+import UserSession from '../models/user/user.session';
+import UserCredentials from '../models/user/user.credentials';
 
 export default class UserServiceDB {
   private async ensureConnection() {
@@ -34,52 +36,58 @@ export default class UserServiceDB {
     }
   }
 
-  private async saveUserInfo(User: User): Promise<number> {
+  private async handlerServiceError(error: Error): Promise<void> {
+    console.error('Ошибка при создании пользователя:', error);
+    throw error;
+  }
+
+  async saveUser(user: User): Promise<void> {
     const saveUserQuery = {
-      text: 'INSERT INTO account_info (account_id, avatar_url, name, email, bio) VALUES ($1, $2, $3, $4, $5) returning account_id',
+      text: 'INSERT INTO account_info (account_id, avatar_url, name, email, bio) VALUES ($1, $2, $3, $4, $5)',
       values: [
-        User.userId,
-        User.avatarURL || null,
-        User.name,
-        User.email,
-        User.bio || null,
+        user.userId,
+        user.avatarURL || null,
+        user.name,
+        user.email,
+        user.bio || null,
       ],
     };
-
-    const userResult = await this.startQuery(saveUserQuery);
-    return userResult.rows[0].account_id;
+    try {
+      await this.startQuery(saveUserQuery);
+    } catch (error) {
+      this.handlerServiceError(error);
+    }
   }
 
-  private async saveSession(accountId: number, token: string): Promise<void> {
-    const saveSessionUserQuery = {
-      text: 'INSERT INTO account_credentials (account_id, password_hash) VALUES ($1, $2);',
-      values: [accountId, token],
-    };
-
-    await this.startQuery(saveSessionUserQuery);
-  }
-
-  private async saveUserCredentials(
-    accountId: number,
-    passwordHash: string,
-  ): Promise<void> {
+  async saveUserCredentials(credentials: UserCredentials): Promise<void> {
     const saveUserCredentialsQuery = {
-      text: 'INSERT INTO account_session (account_id, token) VALUES ($1, $2);',
-      values: [accountId, passwordHash],
+      text: 'INSERT INTO account_credentials (account_credentials_id, account_id, password_hash) VALUES ($1, $2, $3)',
+      values: [
+        credentials.userCredentialsId,
+        credentials.userId,
+        credentials.passwordHash,
+      ],
     };
-
-    await this.startQuery(saveUserCredentialsQuery);
+    try {
+      await this.startQuery(saveUserCredentialsQuery);
+    } catch (error) {
+      this.handlerServiceError(error);
+    }
   }
 
-  async saveUser(User: User): Promise<{ message: string }> {
-    const account = await this.saveUserInfo(User);
-
-    await this.saveSession(account, User.token);
-    await this.saveUserCredentials(account, User.passwordHash);
-
-    return { message: 'Пользователь успешно создан' };
+  async saveUserSession(session: UserSession): Promise<void> {
+    const saveUserSessionQuery = {
+      text: 'INSERT INTO account_session (account_session_id, account_id, token) VALUES ($1, $2, $3)',
+      values: [session.userSessionId, session.userId, session.token],
+    };
+    try {
+      await this.startQuery(saveUserSessionQuery);
+    } catch (error) {
+      this.handlerServiceError(error);
+    }
   }
 
+  // TODO: Доделать обработку ошибок
   async updateUser(
     userId: string,
     newData: Partial<User>,
@@ -94,10 +102,8 @@ export default class UserServiceDB {
         userId,
       ],
     };
-
     await this.startQuery(updateQuery);
-
-    return { message: 'Пользователь успешно изменён' };
+    return { message: 'Пользователь успешно изменен' };
   }
 
   async deleteUser(userId: string): Promise<{ message: string }> {
@@ -115,11 +121,9 @@ export default class UserServiceDB {
         values: [userId],
       },
     ];
-
     for (const deleteQuery of deleteQueries) {
       await this.startQuery(deleteQuery);
     }
-
     return { message: 'Пользователь успешно удален' };
   }
 
@@ -128,24 +132,18 @@ export default class UserServiceDB {
       text: 'SELECT account_id, avatar_url, name, email, bio FROM account_info WHERE account_id = $1',
       values: [userId],
     };
-
     const result = await this.startQuery(getUserQuery);
-
-    // TODO: Сделать многие проверки и вынести их
     if (result.rows.length === 0) {
       return null;
     }
-
     const userData = result.rows[0];
     const user = new User(
       userData.name,
       userData.email,
-      '', // FIXME: Смущает
       userData.bio,
-      userData.avatar_url,
+      userData.avatarURL,
     );
     user.userId = userData.account_id;
-
     return user;
   }
 }

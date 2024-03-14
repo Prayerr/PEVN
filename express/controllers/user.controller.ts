@@ -1,22 +1,32 @@
 import { Response, Request } from 'express';
 import UserServiceDB from '../services/user.service';
-import User from '../models/user.model';
+import User from '../models/user/user.model';
+import UserSession from '../models/user/user.session';
+import UserCredentials from '../models/user/user.credentials';
 
 export default class UserController {
   async createUser(req: Request, res: Response): Promise<void> {
     const { name, email, password, bio, avatarURL } = req.body;
 
     try {
-      const user = new User(name, email, password, bio, avatarURL);
+      const user = new User(name, email, bio, avatarURL);
 
-      await user.generateUUID();
-      await user.hashPassword(password);
-      await user.generateToken();
+      await user.generateUserId();
+
+      const userCredentials = new UserCredentials(user.userId, password);
+      await userCredentials.generateUserCredentialsId();
+      await userCredentials.hashPassword();
+
+      const userSession = new UserSession(user.userId);
+      await userSession.generateUserSessionId();
+      await userSession.generateToken(email);
 
       const userService = new UserServiceDB();
-      const savedUser = await userService.saveUser(user);
+      await userService.saveUser(user);
+      await userService.saveUserCredentials(userCredentials);
+      await userService.saveUserSession(userSession);
 
-      res.json(savedUser);
+      res.json({ message: 'Пользователь успешно создан' });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
