@@ -8,16 +8,28 @@ userRouter.post('/register', async (req: Request, res: Response) => {
   await userController.createUser(req, res);
 });
 
-userRouter.put('/:userId', async (req: Request, res: Response) => {
-  await userController.updateUser(req, res);
-});
+userRouter.put(
+  '/:userId',
+  userController.checkUserExists,
+  async (req: Request, res: Response) => {
+    await userController.updateUser(req, res);
+  },
+);
 
-userRouter.delete('/delete/:userId', async (req: Request, res: Response) => {
-  await userController.deleteUser(req, res);
-});
+userRouter.delete(
+  '/delete/:userId',
+  userController.checkUserExists,
+  async (req: Request, res: Response) => {
+    await userController.deleteUser(req, res);
+  },
+);
 
-userRouter.get('/:userId', async (req: Request, res: Response) => {
-  await userController.getUser(req, res);
-});
+userRouter.get(
+  '/:userId',
+  userController.checkUserExists,
+  async (req: Request, res: Response) => {
+    await userController.getUser(req, res);
+  },
+);
 
 export default userRouter;

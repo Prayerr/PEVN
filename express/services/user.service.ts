@@ -36,11 +36,6 @@ export default class UserServiceDB {
     }
   }
 
-  private async handlerServiceError(error: Error): Promise<void> {
-    console.error('Ошибка при создании пользователя:', error);
-    throw error;
-  }
-
   async saveUser(user: User): Promise<void> {
     const saveUserQuery = {
       text: 'INSERT INTO account_info (account_id, avatar_url, name, email, bio) VALUES ($1, $2, $3, $4, $5)',
@@ -55,7 +50,8 @@ export default class UserServiceDB {
     try {
       await this.startQuery(saveUserQuery);
     } catch (error) {
-      this.handlerServiceError(error);
+      console.error('Ошибка при сохранении пользователя:', error.message);
+      throw error;
     }
   }
 
@@ -71,7 +67,11 @@ export default class UserServiceDB {
     try {
       await this.startQuery(saveUserCredentialsQuery);
     } catch (error) {
-      this.handlerServiceError(error);
+      console.error(
+        'Ошибка при сохранении учетных данных пользователя:',
+        error.message,
+      );
+      throw error;
     }
   }
 
@@ -83,11 +83,14 @@ export default class UserServiceDB {
     try {
       await this.startQuery(saveUserSessionQuery);
     } catch (error) {
-      this.handlerServiceError(error);
+      console.error(
+        'Ошибка при сохранении сеанса пользователя:',
+        error.message,
+      );
+      throw error;
     }
   }
 
-  // TODO: Доделать обработку ошибок
   async updateUser(
     userId: string,
     newData: Partial<User>,
@@ -102,8 +105,13 @@ export default class UserServiceDB {
         userId,
       ],
     };
-    await this.startQuery(updateQuery);
-    return { message: 'Пользователь успешно изменен' };
+    try {
+      await this.startQuery(updateQuery);
+      return { message: 'Пользователь успешно изменен' };
+    } catch (error) {
+      console.error('Ошибка при обновлении пользователя:', error.message);
+      throw error;
+    }
   }
 
   async deleteUser(userId: string): Promise<{ message: string }> {
@@ -121,10 +129,16 @@ export default class UserServiceDB {
         values: [userId],
       },
     ];
-    for (const deleteQuery of deleteQueries) {
-      await this.startQuery(deleteQuery);
+
+    try {
+      for (const deleteQuery of deleteQueries) {
+        await this.startQuery(deleteQuery);
+      }
+      return { message: 'Пользователь успешно удален' };
+    } catch (error) {
+      console.error('Ошибка при удалении пользователя:', error.message);
+      throw error;
     }
-    return { message: 'Пользователь успешно удален' };
   }
 
   async getUser(userId: string): Promise<User | null> {
@@ -132,18 +146,21 @@ export default class UserServiceDB {
       text: 'SELECT account_id, avatar_url, name, email, bio FROM account_info WHERE account_id = $1',
       values: [userId],
     };
-    const result = await this.startQuery(getUserQuery);
-    if (result.rows.length === 0) {
-      return null;
+    try {
+      const result = await this.startQuery(getUserQuery);
+
+      const userData = result.rows[0];
+      const user = new User(
+        userData.name,
+        userData.email,
+        userData.bio,
+        userData.avatarURL,
+      );
+      user.userId = userData.account_id;
+      return user;
+    } catch (error) {
+      console.error('Ошибка при получении пользователя:', error.message);
+      throw error;
     }
-    const userData = result.rows[0];
-    const user = new User(
-      userData.name,
-      userData.email,
-      userData.bio,
-      userData.avatarURL,
-    );
-    user.userId = userData.account_id;
-    return user;
   }
 }
