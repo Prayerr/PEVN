@@ -8,5 +8,5 @@
     "forceConsistentCasingInFileNames": true
   },
 
-  "include": ["index.ts"]
+  "include": ["index.ts", "express/**/*"]
 }

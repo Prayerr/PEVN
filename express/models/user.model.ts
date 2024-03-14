@@ -4,40 +4,44 @@ import hashPassword from '../utils/user/user-hash-password';
 import generateToken from '../utils/user/user-generate-token';
 
 export default class User implements IUser {
-  passwordHash: string;
   userId: string;
+  passwordHash: string;
   name: string;
   email: string;
-  token: string | null;
+  bio?: string;
+  token: string;
   likesCount: number;
-  avatarURL?: string | undefined;
+  avatarURL?: string;
   role: EUserRole;
 
   constructor(
-    userId: string,
     name: string,
     email: string,
     password: string,
+    bio?: string,
+    avatarURL?: string,
     role: EUserRole = EUserRole.READER,
   ) {
-    this.userId = userId;
+    this.userId = '';
+    this.token = '';
     this.name = name;
     this.email = email;
-    this.token = null;
-    this.likesCount = 0;
+    this.bio = bio;
     this.role = role;
     this.passwordHash = password;
+    this.avatarURL = avatarURL;
+    this.likesCount = 0;
   }
 
-  async hashPassword(password: string): Promise<void> {
+  hashPassword = async (password: string): Promise<void> => {
     this.passwordHash = await hashPassword(password);
-  }
+  };
 
-  async generateToken(): Promise<void> {
+  generateToken = async (): Promise<void> => {
     this.token = await generateToken(this.userId, this.email);
-  }
+  };
 
-  async generateUUID(): Promise<void> {
+  generateUUID = async (): Promise<void> => {
     this.userId = await generateUUID();
-  }
+  };
 }

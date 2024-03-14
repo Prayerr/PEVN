@@ -9,9 +9,10 @@ export interface IUser {
   userId: string;
   name: string;
   email: string;
-  token: string | null;
+  token: string;
   likesCount: number;
   avatarURL?: string;
+  bio?: string;
   passwordHash: string;
   role: EUserRole;
 }
