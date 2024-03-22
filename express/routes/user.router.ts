@@ -1,12 +1,19 @@
+import { userValidationRules } from '../utils/validation/validation.rules';
 import { Router, Response, Request } from 'express';
 import UserController from '../controllers/user.controller';
+import validationErrorHandler from '../utils/validation/validation.error.handler';
 
 const userRouter = Router();
 const userController = new UserController();
 
-userRouter.post('/register', async (req: Request, res: Response) => {
-  await userController.createUser(req, res);
-});
+userRouter.post(
+  '/register',
+  userValidationRules,
+  validationErrorHandler,
+  async (req: Request, res: Response) => {
+    await userController.createUser(req, res);
+  },
+);
 
 userRouter.put(
   '/:userId',

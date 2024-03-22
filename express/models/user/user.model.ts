@@ -1,5 +1,5 @@
 import { IUser } from '../../interfaces/user.interface';
-import generateUUID from '../../utils/user/user-generate-uuid';
+import generateUUID from '../../utils/common/uuid.generator';
 
 export default class User implements IUser {
   userId: string;

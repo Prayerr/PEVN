@@ -1,41 +1,9 @@
-import { pool } from '../db/pool';
-import IQuery from '../interfaces/query.interface';
-import User from '../models/user/user.model';
-import UserSession from '../models/user/user.session';
-import UserCredentials from '../models/user/user.credentials';
+import MainServiceDB from '../common/main.service.db';
+import User from '../../models/user/user.model';
+import UserSession from '../../models/user/user.session';
+import UserCredentials from '../../models/user/user.credentials';
 
-export default class UserServiceDB {
-  private async ensureConnection() {
-    try {
-      const client = await pool.connect();
-
-      if (!client) {
-        throw new Error('Отсутствует соединение с базой данных');
-      }
-
-      return client;
-    } catch (error) {
-      console.error('Ошибка соединения с базой данных:', error);
-      throw error;
-    }
-  }
-
-  // FIXME: По документации юзать пуловое соединение с транзакциями нежелательно
-  private async startQuery(IQuery: IQuery) {
-    const client = await this.ensureConnection();
-    try {
-      await client.query('BEGIN');
-      const result = await client.query(IQuery);
-      await client.query('COMMIT');
-      return result;
-    } catch (error) {
-      await client.query('ROLLBACK');
-      throw new Error(`Ошибка выполнения запроса: ${error.message}`);
-    } finally {
-      client.release();
-    }
-  }
-
+export default class UserServiceDB extends MainServiceDB {
   async saveUser(user: User): Promise<void> {
     const saveUserQuery = {
       text: 'INSERT INTO account_info (account_id, avatar_url, name, email, bio) VALUES ($1, $2, $3, $4, $5)',

@@ -15,6 +15,14 @@ export interface IUser {
   bio?: string;
 }
 
+export interface IUserDTO {
+  name: string;
+  email: string;
+  password: string;
+  bio?: string;
+  avatarURL?: string;
+}
+
 export interface IUserCredentials {
   userCredentialsId: string;
   userId: string;

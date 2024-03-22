@@ -1,6 +1,6 @@
 import { IUserCredentials } from '../../interfaces/user.interface';
-import hashPassword from '../../utils/user/user-hash-password';
-import generateUUID from '../../utils/user/user-generate-uuid';
+import hashPassword from '../../utils/user/hash.generator';
+import generateUUID from '../../utils/common/uuid.generator';
 
 export default class UserCredentials implements IUserCredentials {
   userCredentialsId: string;

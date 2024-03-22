@@ -1,10 +1,15 @@
 import { Response, Request, NextFunction } from 'express';
-import UserServiceDB from '../services/user.service';
-import User from '../models/user/user.model';
-import UserSession from '../models/user/user.session';
-import UserCredentials from '../models/user/user.credentials';
+import { IUserDTO } from '../interfaces/user.interface';
+import UserServiceDB from '../services/user/user.service.db';
+import UserCreateService from '../services/user/user.create.service';
 
 export default class UserController {
+  private userCreationService: UserCreateService;
+
+  constructor() {
+    this.userCreationService = new UserCreateService();
+  }
+  // FIXME: Подправить отлов ошибки
   async checkUserExists(
     req: Request,
     res: Response,
@@ -29,25 +34,20 @@ export default class UserController {
   }
 
   async createUser(req: Request, res: Response): Promise<void> {
-    const { name, email, password, bio, avatarURL } = req.body;
-
     try {
-      const user = new User(name, email, bio, avatarURL);
+      const { name, email, password, bio, avatarURL } = req.body as IUserDTO;
+      if (!name || !email || !password) {
+        res.status(400).json({ error: 'Отсутствуют обязательные данные' });
+        return;
+      }
 
-      await user.generateUserId();
-
-      const userCredentials = new UserCredentials(user.userId, password);
-      await userCredentials.generateUserCredentialsId();
-      await userCredentials.hashPassword();
-
-      const userSession = new UserSession(user.userId);
-      await userSession.generateUserSessionId();
-      await userSession.generateToken(email);
-
-      const userService = new UserServiceDB();
-      await userService.saveUser(user);
-      await userService.saveUserCredentials(userCredentials);
-      await userService.saveUserSession(userSession);
+      await this.userCreationService.createUser(
+        name,
+        email,
+        password,
+        bio,
+        avatarURL,
+      );
 
       res.json({ message: 'Пользователь успешно создан' });
     } catch (error) {
@@ -56,10 +56,9 @@ export default class UserController {
   }
 
   async updateUser(req: Request, res: Response): Promise<void> {
-    const userId = req.params.userId;
-    const newData = req.body;
-
     try {
+      const userId = req.params.userId;
+      const newData = req.body as IUserDTO;
       const userService = new UserServiceDB();
       const updatedUser = await userService.updateUser(userId, newData);
 
@@ -70,9 +69,8 @@ export default class UserController {
   }
 
   async deleteUser(req: Request, res: Response): Promise<void> {
-    const userId = req.params.userId;
-
     try {
+      const userId = req.params.userId;
       const userService = new UserServiceDB();
       await userService.deleteUser(userId);
 
@@ -83,9 +81,9 @@ export default class UserController {
   }
 
   async getUser(req: Request, res: Response): Promise<void> {
-    const userId = req.params.userId;
-
     try {
+      const userId = req.params.userId;
+
       const userService = new UserServiceDB();
       const user = await userService.getUser(userId);
 

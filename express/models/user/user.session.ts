@@ -1,6 +1,6 @@
 import { IUserSession } from '../../interfaces/user.interface';
-import generateToken from '../../utils/user/user-generate-token';
-import generateUUID from '../../utils/user/user-generate-uuid';
+import generateToken from '../../utils/user/token,generator';
+import generateUUID from '../../utils/common/uuid.generator';
 
 export default class UserSession implements IUserSession {
   userSessionId: string;
