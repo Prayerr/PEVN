@@ -1,10 +1,16 @@
 import { userValidationRules } from '../utils/validation/validation.rules';
 import { Router, Response, Request } from 'express';
+import { checkUserExists } from '../middlewares/user.middleware';
 import UserController from '../controllers/user.controller';
+import UserServiceDB from '../services/user/user.service.db';
+import UserCreateService from '../services/user/user.create.service';
 import validationErrorHandler from '../utils/validation/validation.error.handler';
 
 const userRouter = Router();
-const userController = new UserController();
+
+const userServiceDB = new UserServiceDB();
+const userCreateService = new UserCreateService(userServiceDB);
+const userController = new UserController(userCreateService, userServiceDB);
 
 userRouter.post(
   '/register',
@@ -17,7 +23,7 @@ userRouter.post(
 
 userRouter.put(
   '/:userId',
-  userController.checkUserExists,
+  checkUserExists,
   async (req: Request, res: Response) => {
     await userController.updateUser(req, res);
   },
@@ -25,7 +31,7 @@ userRouter.put(
 
 userRouter.delete(
   '/delete/:userId',
-  userController.checkUserExists,
+  checkUserExists,
   async (req: Request, res: Response) => {
     await userController.deleteUser(req, res);
   },
@@ -33,7 +39,7 @@ userRouter.delete(
 
 userRouter.get(
   '/:userId',
-  userController.checkUserExists,
+  checkUserExists,
   async (req: Request, res: Response) => {
     await userController.getUser(req, res);
   },

@@ -59,6 +59,7 @@ export default class UserServiceDB extends MainServiceDB {
     }
   }
 
+  // TODO: Сделать проверку на то что изменились ли данные при запросе (Дабы не делать лишних запросов, либо миддлвара либо тут в сервисе)
   async updateUser(
     userId: string,
     newData: Partial<User>,
@@ -116,6 +117,10 @@ export default class UserServiceDB extends MainServiceDB {
     };
     try {
       const result = await this.startQuery(getUserQuery);
+
+      if (result.rows.length === 0) {
+        return null;
+      }
 
       const userData = result.rows[0];
       const user = new User(

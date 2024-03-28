@@ -6,8 +6,8 @@ import UserCredentials from '../../models/user/user.credentials';
 export default class UserCreateService {
   private userService: UserServiceDB;
 
-  constructor() {
-    this.userService = new UserServiceDB();
+  constructor(userService: UserServiceDB) {
+    this.userService = userService;
   }
 
   async createUser(
