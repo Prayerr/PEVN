@@ -1,22 +1,22 @@
+import {
+  IUserDTO,
+  IUserCreateService,
+  IUserServiceDB,
+} from '../../interfaces/user.interface';
 import User from '../../models/user/user.model';
 import UserSession from '../../models/user/user.session';
-import UserServiceDB from './user.service.db';
 import UserCredentials from '../../models/user/user.credentials';
 
-export default class UserCreateService {
-  private userService: UserServiceDB;
+export default class UserCreateService implements IUserCreateService {
+  private userService: IUserServiceDB;
 
-  constructor(userService: UserServiceDB) {
+  constructor(userService: IUserServiceDB) {
     this.userService = userService;
   }
 
-  async createUser(
-    name: string,
-    email: string,
-    password: string,
-    bio?: string,
-    avatarURL?: string,
-  ): Promise<void> {
+  async createUser(userData: IUserDTO): Promise<void> {
+    const { name, email, password, bio, avatarURL } = userData;
+
     const user = new User(name, email, bio, avatarURL);
     await user.generateUserId();
 

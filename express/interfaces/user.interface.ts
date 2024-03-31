@@ -34,3 +34,19 @@ export interface IUserSession {
   userId: string;
   token: string;
 }
+
+export interface IUserCreateService {
+  createUser(userData: IUserDTO): Promise<void>;
+}
+
+export interface IUserServiceDB {
+  saveUser(user: IUser): Promise<void>;
+  saveUserCredentials(credentials: IUserCredentials): Promise<void>;
+  saveUserSession(session: IUserSession): Promise<void>;
+  updateUser(
+    userId: string,
+    newData: Partial<IUser>,
+  ): Promise<{ message: string }>;
+  deleteUser(userId: string): Promise<{ message: string }>;
+  getUser(userId: string): Promise<IUser | null>;
+}

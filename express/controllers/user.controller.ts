@@ -1,15 +1,17 @@
 import { Response, Request } from 'express';
-import { IUserDTO } from '../interfaces/user.interface';
-import UserServiceDB from '../services/user/user.service.db';
-import UserCreateService from '../services/user/user.create.service';
+import {
+  IUserDTO,
+  IUserCreateService,
+  IUserServiceDB,
+} from '../interfaces/user.interface';
 
 export default class UserController {
-  private userCreationService: UserCreateService;
-  private userServiceDB: UserServiceDB;
+  private userCreationService: IUserCreateService;
+  private userServiceDB: IUserServiceDB;
 
   constructor(
-    userCreationService: UserCreateService,
-    userServiceDB: UserServiceDB,
+    userCreationService: IUserCreateService,
+    userServiceDB: IUserServiceDB,
   ) {
     this.userCreationService = userCreationService;
     this.userServiceDB = userServiceDB;
@@ -17,15 +19,9 @@ export default class UserController {
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password, bio, avatarURL } = req.body as IUserDTO;
+      const userData = req.body as IUserDTO;
 
-      await this.userCreationService.createUser(
-        name,
-        email,
-        password,
-        bio,
-        avatarURL,
-      );
+      await this.userCreationService.createUser(userData);
 
       res.json({ message: 'Пользователь успешно создан' });
     } catch (error) {

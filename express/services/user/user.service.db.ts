@@ -1,9 +1,13 @@
+import { IUserServiceDB } from '../../interfaces/user.interface';
 import MainServiceDB from '../common/main.service.db';
 import User from '../../models/user/user.model';
 import UserSession from '../../models/user/user.session';
 import UserCredentials from '../../models/user/user.credentials';
 
-export default class UserServiceDB extends MainServiceDB {
+export default class UserServiceDB
+  extends MainServiceDB
+  implements IUserServiceDB
+{
   async saveUser(user: User): Promise<void> {
     const saveUserQuery = {
       text: 'INSERT INTO account_info (account_id, avatar_url, name, email, bio) VALUES ($1, $2, $3, $4, $5)',
