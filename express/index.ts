@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import userRouter from './routes/user.router';
-// import postRouter from './routes/post.router';
+import postRouter from './routes/post.router';
 
 const app = express();
 const PORT: number = 3000;
@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use('/account', userRouter);
 
-// app.use('/post', postRouter);
+app.use('/post', postRouter);
 
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 

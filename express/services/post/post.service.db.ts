@@ -1,7 +1,11 @@
+import { IPostServiceDB } from '../../interfaces/post.interface';
 import MainServiceDB from '../common/main.service.db';
 import Post from '../../models/post/post.model';
 
-export default class PostServiceDB extends MainServiceDB {
+export default class PostServiceDB
+  extends MainServiceDB
+  implements IPostServiceDB
+{
   async savePost(post: Post): Promise<void> {
     const savePostQuery = {
       text: 'INSERT INTO post (post_id, account_id, title, post_text) VALUES ($1, $2, $3, $4)',

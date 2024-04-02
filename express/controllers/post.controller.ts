@@ -1,26 +1,72 @@
 import { Response, Request } from 'express';
-import { IPostDTO } from '../interfaces/post.interface';
-// import PostServiceDB from '../services/post/post.service.db';
-import PostCreateService from '../services/post/post.create.service';
+import {
+  ICreatePostDTO,
+  IPostCreateService,
+  IPostServiceDB,
+  IUpdatePostDTO,
+} from '../interfaces/post.interface';
 
-// TODO: Дописать контроллер
 export default class PostController {
-  private postCreateService: PostCreateService;
+  private postCreateService: IPostCreateService;
+  private postServiceDB: IPostServiceDB;
 
-  constructor(postCreateService: PostCreateService) {
+  constructor(
+    postCreateService: IPostCreateService,
+    postServiceDB: IPostServiceDB,
+  ) {
     this.postCreateService = postCreateService;
+    this.postServiceDB = postServiceDB;
   }
 
   async createPost(req: Request, res: Response): Promise<void> {
     try {
-      const { title, postText } = req.body as IPostDTO;
+      const { title, postText } = req.body as ICreatePostDTO;
       const userId = req.params.userId;
 
-      await this.postCreateService.createPost(userId, title, postText, 0);
+      await this.postCreateService.createPost({
+        userId,
+        title,
+        postText,
+        views: 0,
+      });
 
       res.json({ message: 'Пост успешно создан' });
     } catch (error) {
       res.status(500).json({ error: 'Ошибка при создании поста' });
+    }
+  }
+
+  async updatePost(req: Request, res: Response): Promise<void> {
+    try {
+      const postId = req.params.postId;
+      const newData = req.body as IUpdatePostDTO;
+      const updatedPost = await this.postServiceDB.updatePost(postId, newData);
+
+      res.json(updatedPost);
+    } catch (error) {
+      res.status(500).json({ error: 'Возникла ошибка при изменении поста' });
+    }
+  }
+
+  async deletePost(req: Request, res: Response): Promise<void> {
+    try {
+      const postId = req.params.postId;
+      await this.postServiceDB.deletePost(postId);
+
+      res.json({ message: 'Пост успешно удалён' });
+    } catch (error) {
+      res.status(500).json({ error: 'Не удалось удалить пост' });
+    }
+  }
+
+  async getPost(req: Request, res: Response): Promise<void> {
+    try {
+      const postId = req.params.postId;
+      const post = await this.postServiceDB.getPost(postId);
+
+      res.json(post);
+    } catch (error) {
+      res.status(500).json({ error: 'Ошибка при получении поста' });
     }
   }
 }

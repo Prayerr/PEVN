@@ -1,20 +1,20 @@
+import {
+  ICreatePostServiceDTO,
+  IPostCreateService,
+} from '../../interfaces/post.interface';
 import Post from '../../models/post/post.model';
 import PostServiceDB from './post.service.db';
 
-export default class PostCreateService {
+export default class PostCreateService implements IPostCreateService {
   private postService: PostServiceDB;
 
   constructor(postService: PostServiceDB) {
     this.postService = postService;
   }
 
-  async createPost(
-    userId: string,
-    title: string,
-    postText: string,
-    views: number,
-  ): Promise<void> {
+  async createPost(postData: ICreatePostServiceDTO): Promise<void> {
     try {
+      const { userId, title, postText, views } = postData;
       const post = new Post(userId, title, postText, views);
       await post.generatePostId();
 
