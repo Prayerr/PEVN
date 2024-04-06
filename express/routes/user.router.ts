@@ -22,7 +22,7 @@ userRouter.post(
 );
 
 userRouter.put(
-  '/:userId',
+  '/:userId/update',
   checkUserExists,
   async (req: Request, res: Response) => {
     await userController.updateUser(req, res);
@@ -30,7 +30,7 @@ userRouter.put(
 );
 
 userRouter.delete(
-  '/delete/:userId',
+  '/:userId/delete',
   checkUserExists,
   async (req: Request, res: Response) => {
     await userController.deleteUser(req, res);

@@ -1,9 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import RegistrationForm from '../components/RegistrationForm.vue';
+</script>
 
 <template>
   <div>
-    <h1>Test</h1>
+    <RegistrationForm />
   </div>
 </template>
 
-<style></style>
+<style lang="scss"></style>

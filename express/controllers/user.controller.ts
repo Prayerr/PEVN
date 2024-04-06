@@ -33,17 +33,19 @@ export default class UserController {
     try {
       const userId = req.params.userId;
       const newData = req.body as IUserDTO;
-      const updatedUser = await this.userServiceDB.updateUser(userId, newData);
 
-      res.json(updatedUser);
+      await this.userServiceDB.updateUser(userId, newData);
+
+      res.json({ message: 'Данные профиля успешно обновлены' });
     } catch (error) {
-      res.status(500).json({ error: 'Не удалось изменить пользователя' });
+      res.status(500).json({ error: 'Не удалось обновить профиль' });
     }
   }
 
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.params.userId;
+
       await this.userServiceDB.deleteUser(userId);
 
       res.json({ message: 'Пользователь успешно удален' });

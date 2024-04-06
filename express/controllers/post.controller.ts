@@ -40,9 +40,10 @@ export default class PostController {
     try {
       const postId = req.params.postId;
       const newData = req.body as IUpdatePostDTO;
-      const updatedPost = await this.postServiceDB.updatePost(postId, newData);
 
-      res.json(updatedPost);
+      await this.postServiceDB.updatePost(postId, newData);
+
+      res.json({ message: 'Пост успешно изменён' });
     } catch (error) {
       res.status(500).json({ error: 'Возникла ошибка при изменении поста' });
     }
@@ -51,6 +52,7 @@ export default class PostController {
   async deletePost(req: Request, res: Response): Promise<void> {
     try {
       const postId = req.params.postId;
+
       await this.postServiceDB.deletePost(postId);
 
       res.json({ message: 'Пост успешно удалён' });

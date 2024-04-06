@@ -1,12 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  },
-
+  "extends": "../tsconfig.json",
   "include": ["index.ts", "express/**/*"]
 }

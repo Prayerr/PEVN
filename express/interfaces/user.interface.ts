@@ -43,10 +43,7 @@ export interface IUserServiceDB {
   saveUser(user: IUser): Promise<void>;
   saveUserCredentials(credentials: IUserCredentials): Promise<void>;
   saveUserSession(session: IUserSession): Promise<void>;
-  updateUser(
-    userId: string,
-    newData: Partial<IUser>,
-  ): Promise<{ message: string }>;
-  deleteUser(userId: string): Promise<{ message: string }>;
+  updateUser(userId: string, newData: Partial<IUser>): Promise<void>;
+  deleteUser(userId: string): Promise<void>;
   getUser(userId: string): Promise<IUser | null>;
 }

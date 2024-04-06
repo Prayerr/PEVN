@@ -9,7 +9,7 @@ const __dirname = import.meta.dirname;
 
 app.use(express.json());
 
-app.use('/account', userRouter);
+app.use('/profile', userRouter);
 
 app.use('/post', postRouter);
 

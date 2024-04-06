@@ -49,22 +49,27 @@ export default class PostServiceDB
 
   async getPost(postId: string): Promise<Post | null> {
     const getQuery = {
-      text: 'SELECT * FROM post WHERE post_id = $1',
+      text: 'SELECT post_id, account_id, title, post_text, created_at, updated_at, views FROM post WHERE post_id = $1',
       values: [postId],
     };
 
     try {
       const result = await this.startQuery(getQuery);
 
+      if (result.rows.length === 0) {
+        return null;
+      }
+
       const postData = result.rows[0];
       const post = new Post(
-        postData.userId,
+        postData.account_id,
         postData.title,
-        postData.postText,
-        postData.createdAt,
-        postData.updatedAt,
+        postData.post_text,
+        postData.created_at,
+        postData.updated_at,
         postData.views,
       );
+
       return post;
     } catch (error) {
       console.error('Ошибка при получении поста:', error.message);

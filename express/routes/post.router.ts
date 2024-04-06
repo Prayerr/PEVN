@@ -15,7 +15,7 @@ postRouter.post('/:userId/create', async (req: Request, res: Response) => {
 });
 
 postRouter.put(
-  '/:postId',
+  '/:postId/update',
   checkPostExists,
   async (req: Request, res: Response) => {
     await postController.updatePost(req, res);
@@ -23,7 +23,7 @@ postRouter.put(
 );
 
 postRouter.delete(
-  '/deletePost/:postId',
+  '/:postId/delete',
   checkPostExists,
   async (req: Request, res: Response) => {
     await postController.deletePost(req, res);

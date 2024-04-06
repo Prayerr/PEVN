@@ -64,10 +64,7 @@ export default class UserServiceDB
   }
 
   // TODO: Сделать проверку на то что изменились ли данные при запросе (Дабы не делать лишних запросов, либо миддлвара либо тут в сервисе)
-  async updateUser(
-    userId: string,
-    newData: Partial<User>,
-  ): Promise<{ message: string }> {
+  async updateUser(userId: string, newData: Partial<User>): Promise<void> {
     const updateQuery = {
       text: 'UPDATE account_info SET name = $1, email = $2, bio = $3, avatar_url = $4 WHERE account_id = $5',
       values: [
@@ -80,14 +77,13 @@ export default class UserServiceDB
     };
     try {
       await this.startQuery(updateQuery);
-      return { message: 'Пользователь успешно изменен' };
     } catch (error) {
       console.error('Ошибка при обновлении пользователя:', error.message);
       throw error;
     }
   }
 
-  async deleteUser(userId: string): Promise<{ message: string }> {
+  async deleteUser(userId: string): Promise<void> {
     const deleteQueries = [
       {
         text: 'DELETE FROM account_credentials WHERE account_id = $1',
@@ -107,7 +103,6 @@ export default class UserServiceDB
       for (const deleteQuery of deleteQueries) {
         await this.startQuery(deleteQuery);
       }
-      return { message: 'Пользователь успешно удален' };
     } catch (error) {
       console.error('Ошибка при удалении пользователя:', error.message);
       throw error;
@@ -131,8 +126,9 @@ export default class UserServiceDB
         userData.name,
         userData.email,
         userData.bio,
-        userData.avatarURL,
+        userData.avatar_url,
       );
+
       user.userId = userData.account_id;
       return user;
     } catch (error) {
