@@ -1,5 +1,5 @@
 import { IPostServiceDB } from '../../interfaces/post.interface';
-import MainServiceDB from '../common/main.service.db';
+import MainServiceDB from '../../repositories/main.repository';
 import Post from '../../models/post/post.model';
 
 export default class PostServiceDB

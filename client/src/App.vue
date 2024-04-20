@@ -1,11 +1,7 @@
-<script setup lang="ts">
-import RegistrationForm from '../components/RegistrationForm.vue';
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <RegistrationForm />
-  </div>
+  <div><router-view></router-view></div>
 </template>
 
 <style lang="scss"></style>

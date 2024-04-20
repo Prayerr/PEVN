@@ -1,3 +1,5 @@
+/* TODO: ДОДЕЛАТЬ ВЕЗДЕ ОБРАБОТКУ ОШИБОК (ну то есть вывод ошибок на фронте),
+ПОФИКСИТЬ КОД */
 <template>
   <section class="registration">
     <header>
@@ -28,6 +30,7 @@
       <label class="registration-form__label" for="password">password</label>
       <input
         v-model="user.password"
+        @input="checkPasswordMatch"
         class="registration-form__input"
         type="password"
         id="password"
@@ -39,11 +42,19 @@
       </label>
       <input
         v-model="user.confirmPassword"
+        @input="checkPasswordMatch"
         class="registration-form__input"
         type="password"
         id="confirm-password"
         required
       />
+
+      <p v-if="passwordsDoNotMatch" class="error-message">
+        Пароли не совпадают
+      </p>
+      <p v-if="registrationError" class="error-message">
+        {{ registrationError }}
+      </p>
 
       <input type="checkbox" id="terms-checkbox" required />
       <label for="terms-checkbox" class="registration-form__checkbox-label">
@@ -55,13 +66,18 @@
       </label>
 
       <button type="submit" class="registration-form__button">done</button>
+
+      <footer>
+        <router-link to="/auth">I already have an account</router-link>
+      </footer>
     </form>
   </section>
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
+import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import axios from 'axios';
 
 const user = ref({
   name: '',
@@ -70,12 +86,23 @@ const user = ref({
   confirmPassword: '',
 });
 
+const registrationError = ref('');
+const passwordsDoNotMatch = ref(false);
+const router = useRouter();
+
+const checkPasswordMatch = () => {
+  passwordsDoNotMatch.value =
+    user.value.password !== user.value.confirmPassword;
+};
+
 const submitForm = async () => {
   try {
     if (user.value.password !== user.value.confirmPassword) {
-      alert('Пароли не совпадают');
+      passwordsDoNotMatch.value = true;
       return;
     }
+
+    passwordsDoNotMatch.value = false;
 
     const response = await axios.post('/profile/register', {
       name: user.value.name,
@@ -83,9 +110,18 @@ const submitForm = async () => {
       password: user.value.password,
       confirmPassword: user.value.confirmPassword,
     });
+
+    if (response.status === 200) {
+      router.push('/profile');
+    }
+
     console.log(response.data.message);
   } catch (error) {
-    console.error('Ошибка при регистрации:', error);
+    if (error.response.status === 409) {
+      registrationError.value = error.response.data.error;
+    } else {
+      console.error('Ошибка при регистрации:', error);
+    }
   }
 };
 </script>
@@ -98,7 +134,7 @@ const submitForm = async () => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border: 5px #94bfa7 dotted;
+  border: 5px $primary-color dotted;
 }
 
 .registration-form__terms-link {
@@ -114,16 +150,16 @@ const submitForm = async () => {
 
 .registration-form__label,
 .registration-form__checkbox-label {
-  color: $text-color;
+  color: $primary-color;
   font-size: $form-font-size;
 }
 
 .registration-form__button {
-  color: $text-color;
+  color: $primary-color;
 }
 
 .registration-form__input {
-  border: 3px solid #94bfa7;
+  border: 3px solid $primary-color;
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
@@ -131,7 +167,7 @@ const submitForm = async () => {
 }
 
 .registration-form__button {
-  border: 3px solid #94bfa7;
+  border: 3px solid $primary-color;
   border-radius: 5px;
   width: 100px;
   height: 276px;

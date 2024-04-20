@@ -1,7 +1,7 @@
-import pool from '../../db/pool';
-import IQuery from '../../interfaces/query.interface';
+import { IQuery } from '../interfaces/service.interface';
+import pool from '../db/pool';
 
-export default class MainServiceDB {
+export default class MainRepository {
   protected async ensureConnection() {
     try {
       const client = await pool.connect();
@@ -17,16 +17,18 @@ export default class MainServiceDB {
     }
   }
 
-  protected async startQuery(IQuery: IQuery) {
+  protected async startQuery(query: IQuery) {
     const client = await this.ensureConnection();
     try {
       await client.query('BEGIN');
-      const result = await client.query(IQuery);
+      const result = await client.query(query.text, query.values);
       await client.query('COMMIT');
       return result;
     } catch (error) {
       await client.query('ROLLBACK');
-      throw new Error(`Ошибка выполнения запроса: ${error.message}`);
+      const errorDB = new Error(`Ошибка выполнения запроса: ${error.message}`);
+      errorDB.code = error.code;
+      throw errorDB;
     } finally {
       client.release();
     }

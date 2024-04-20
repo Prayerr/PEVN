@@ -10,6 +10,7 @@ export default class UserCredentials implements IUserCredentials {
   constructor(userId: string, password: string) {
     this.userId = userId;
     this.passwordHash = password;
+    this.userCredentialsId = '';
   }
 
   async generateUserCredentialsId() {

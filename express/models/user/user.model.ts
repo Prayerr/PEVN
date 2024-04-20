@@ -15,6 +15,7 @@ export default class User implements IUser {
     this.bio = bio;
     this.avatarURL = avatarURL;
     this.likesCount = 0;
+    this.userId = '';
   }
 
   async generateUserId() {

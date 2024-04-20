@@ -1,12 +1,10 @@
-import { IUserServiceDB } from '../../interfaces/user.interface';
-import MainServiceDB from '../common/main.service.db';
+import { IUserRepository } from '../../interfaces/repository.interface';
 import User from '../../models/user/user.model';
-import UserSession from '../../models/user/user.session';
-import UserCredentials from '../../models/user/user.credentials';
+import MainRepository from '../main.repository';
 
-export default class UserServiceDB
-  extends MainServiceDB
-  implements IUserServiceDB
+export default class UserRepository
+  extends MainRepository
+  implements IUserRepository
 {
   async saveUser(user: User): Promise<void> {
     const saveUserQuery = {
@@ -23,47 +21,11 @@ export default class UserServiceDB
       await this.startQuery(saveUserQuery);
     } catch (error) {
       console.error('Ошибка при сохранении пользователя:', error.message);
+      console.error('Код ошибки:', error.code);
       throw error;
     }
   }
 
-  async saveUserCredentials(credentials: UserCredentials): Promise<void> {
-    const saveUserCredentialsQuery = {
-      text: 'INSERT INTO account_credentials (account_credentials_id, account_id, password_hash) VALUES ($1, $2, $3)',
-      values: [
-        credentials.userCredentialsId,
-        credentials.userId,
-        credentials.passwordHash,
-      ],
-    };
-    try {
-      await this.startQuery(saveUserCredentialsQuery);
-    } catch (error) {
-      console.error(
-        'Ошибка при сохранении учетных данных пользователя:',
-        error.message,
-      );
-      throw error;
-    }
-  }
-
-  async saveUserSession(session: UserSession): Promise<void> {
-    const saveUserSessionQuery = {
-      text: 'INSERT INTO account_session (account_session_id, account_id, token) VALUES ($1, $2, $3)',
-      values: [session.userSessionId, session.userId, session.token],
-    };
-    try {
-      await this.startQuery(saveUserSessionQuery);
-    } catch (error) {
-      console.error(
-        'Ошибка при сохранении сеанса пользователя:',
-        error.message,
-      );
-      throw error;
-    }
-  }
-
-  // TODO: Сделать проверку на то что изменились ли данные при запросе (Дабы не делать лишних запросов, либо миддлвара либо тут в сервисе)
   async updateUser(userId: string, newData: Partial<User>): Promise<void> {
     const updateQuery = {
       text: 'UPDATE account_info SET name = $1, email = $2, bio = $3, avatar_url = $4 WHERE account_id = $5',
@@ -79,6 +41,7 @@ export default class UserServiceDB
       await this.startQuery(updateQuery);
     } catch (error) {
       console.error('Ошибка при обновлении пользователя:', error.message);
+      console.error('Код ошибки:', error.code);
       throw error;
     }
   }
@@ -105,6 +68,7 @@ export default class UserServiceDB
       }
     } catch (error) {
       console.error('Ошибка при удалении пользователя:', error.message);
+      console.error('Код ошибки:', error.code);
       throw error;
     }
   }
@@ -133,6 +97,7 @@ export default class UserServiceDB
       return user;
     } catch (error) {
       console.error('Ошибка при получении пользователя:', error.message);
+      console.error('Код ошибки:', error.code);
       throw error;
     }
   }

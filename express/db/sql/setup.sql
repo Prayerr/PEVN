@@ -1,37 +1,46 @@
 -- TODO: Разобраться с ролями (нет таблицы даже) (сделать таблицу сообщества подписчики )
+-- TODO: МБ поработать с обработкой фингерпринтов 
+-- TODO: Так как через триггер удаляется запись с сессией спустя 30 дней, то нужно проработать логику входа в учётку спусти 30 дней (Репозиторий с его get в помощь)
 
 CREATE TABLE account_info (
-    account_id UUID PRIMARY KEY,
-    avatar_url VARCHAR(255),
-    name VARCHAR(16) UNIQUE NOT NULL,
-    email VARCHAR(64) UNIQUE NOT NULL,
-    bio VARCHAR(255),
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    PRIMARY KEY (account_id),
+    account_id        UUID         NOT NULL,
+    registration_date TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    name              VARCHAR(16)  UNIQUE NOT NULL,
+    email             VARCHAR(64)  UNIQUE NOT NULL,  
+    avatar_url        VARCHAR(255),
+    bio               VARCHAR(255)
 );
 
 CREATE TABLE account_credentials (
-    account_credentials_id UUID PRIMARY KEY,
-    account_id UUID,
-    password_hash VARCHAR(255),
-    FOREIGN KEY (account_id) REFERENCES account_info(account_id)
+    PRIMARY KEY (account_credentials_id),
+    FOREIGN KEY (account_id) REFERENCES account_info(account_id) ON DELETE CASCADE,
+    account_credentials_id UUID         NOT NULL,
+    account_id             UUID         NOT NULL,
+    password_hash          VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE account_session (
-    account_session_id UUID PRIMARY KEY,
-    account_id UUID,
-    token VARCHAR(255),
-    FOREIGN KEY (account_id) REFERENCES account_info(account_id)
+    PRIMARY KEY (account_session_id), 
+    FOREIGN KEY (account_id) REFERENCES account_info(account_id) ON DELETE CASCADE,
+    account_session_id UUID         NOT NULL,
+    account_id         UUID         NOT NULL,
+    started_at         TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    ip_address         VARCHAR(45)  NOT NULL,
+    refresh_token      VARCHAR(255) NOT NULL,
+    device_type        VARCHAR(128)
 );
 
 CREATE TABLE post (
-    post_id UUID PRIMARY KEY NOT NULL,
-    account_id UUID NOT NULL,
-    title VARCHAR(64) NOT NULL,
-    post_text VARCHAR(2048) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP, -- Напишу потом триггер на автоматическое обновление
-    views INT DEFAULT 0 NOT NULL,
+    PRIMARY KEY (post_id)
     FOREIGN KEY (account_id) REFERENCES account_info(account_id)
+    post_id    UUID,
+    account_id UUID          NOT NULL,
+    title      VARCHAR(64)   NOT NULL,
+    post_text  VARCHAR(2048) NOT NULL,
+    created_at TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    views      INT           DEFAULT 0 NOT NULL
 );
 
 CREATE TABLE comment (

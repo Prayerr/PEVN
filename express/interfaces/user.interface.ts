@@ -1,11 +1,3 @@
-// TODO: Вместе с реализацией ролей в БД, сделать и реализацию ролей на сервере
-export enum EUserRole {
-  READER = 'reader',
-  EDITOR = 'editor',
-  MODERATOR = 'moderator',
-  ADMIN = 'admin',
-}
-
 export interface IUser {
   userId: string;
   name: string;
@@ -31,19 +23,8 @@ export interface IUserCredentials {
 
 export interface IUserSession {
   userSessionId: string;
+  deviceType: string;
+  ipAddress: string;
   userId: string;
   token: string;
-}
-
-export interface IUserCreateService {
-  createUser(userData: IUserDTO): Promise<void>;
-}
-
-export interface IUserServiceDB {
-  saveUser(user: IUser): Promise<void>;
-  saveUserCredentials(credentials: IUserCredentials): Promise<void>;
-  saveUserSession(session: IUserSession): Promise<void>;
-  updateUser(userId: string, newData: Partial<IUser>): Promise<void>;
-  deleteUser(userId: string): Promise<void>;
-  getUser(userId: string): Promise<IUser | null>;
 }
