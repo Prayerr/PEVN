@@ -1,18 +1,14 @@
 <template>
+  <AuthRedirectButtonVue />
   <section class="auth">
-    <header>
-      <h1>Welcome back</h1>
-      <h2>Enter your details to access your account</h2>
-    </header>
+    <h1>login</h1>
     <form class="auth-form" @submit.prevent="login">
-      <label class="auth-form__label" for="email-username">
-        email / username
-      </label>
+      <label class="auth-form__label" for="email">email</label>
       <input
         v-model="email"
         class="auth-form__input"
         type="text"
-        id="email-username"
+        id="email"
         required
       />
 
@@ -25,26 +21,39 @@
         required
       />
 
-      <label for="remember-checkbox">
-        <span>Remember me?</span>
-        <input type="checkbox" id="remember-checkbox" />
-      </label>
-      <footer>
-        <a href="forgot">Forgot password?</a>
-        <router-link to="/register">Don't have your own account?</router-link>
-      </footer>
-      <button type="submit">Login</button>
+      <button class="auth-form__button" type="submit">login</button>
+      <router-link to="/forgot" class="auth-form__link">
+        forgot password?
+      </router-link>
     </form>
   </section>
+
+  <footer>
+    <router-link to="/register" class="footer__link">no account?</router-link>
+    <button class="footer__register">Register</button>
+  </footer>
+
+  <InputWithLabel
+    label="email"
+    v-model="email"
+    inputType="text"
+    input-id="email"
+    labelClass="auth-form__label"
+    required
+  />
+
+  <p v-if="authError" class="error-message">{{ authError }}</p>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import axios from 'axios';
+import AuthRedirectButtonVue from './AuthRedirectButton.vue';
 
 const email = ref('');
 const password = ref('');
+const authError = ref('');
 
 const router = useRouter();
 
@@ -56,9 +65,16 @@ const login = async () => {
     });
 
     if (response.status === 200) {
-      router.push('/profile');
+      router.push(`/profile/${response.data.user.name}`);
     }
   } catch (error) {
+    if (error.response.status === 404) {
+      authError.value = 'Пользователь не найден';
+    } else if (error.response.status === 401) {
+      authError.value = 'Неправильный пароль или имя пользователя';
+    } else {
+      authError.value = 'Ошибка при входе';
+    }
     console.error('Ошибка при входе:', error);
   }
 };
@@ -66,32 +82,28 @@ const login = async () => {
 
 <style lang="scss">
 @import '../src/styles/global.scss';
+
 body {
-  margin: 0;
-  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 700px;
+  font-weight: 600;
 }
 
 .auth {
-  border: 2px dashed $primary-color;
+  background-color: $primary-color;
+  color: $primary-color-text;
+  border-radius: 15px;
   padding: 20px;
   width: 645px;
-}
 
-.auth header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.auth header h1 {
-  font-size: 48px;
-}
-
-.auth header h2 {
-  font-size: 24px;
+  h1 {
+    margin: 0;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    font-size: 44px;
+  }
 }
 
 .auth-form {
@@ -99,24 +111,61 @@ body {
   flex-direction: column;
 }
 
-.auth-form__label {
-  font-size: $form-font-size;
-  color: $primary-color;
-  margin-bottom: 10px;
+.auth-form__button {
+  @include button-style;
+  margin: 0 auto;
+  display: block;
+  width: 260px;
+  height: 75px;
 }
 
-.auth-form__input {
-  border: 2px solid $primary-color;
-  padding: 10px;
-  font-size: $form-font-size;
-  margin-bottom: 20px;
-}
-
-.auth footer {
+.auth-form__link {
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 32px;
+  margin-top: 20px;
   text-align: center;
 }
 
-.auth footer a {
-  margin: 0 10px;
+.error-message {
+  text-align: center;
+  font-size: 32px;
+  color: #ff0000;
+}
+
+.auth-form__label {
+  font-size: $form-font-size;
+}
+
+.auth-form__input {
+  @include input-style;
+}
+
+footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 15px;
+  background-color: $primary-color;
+
+  .footer__link {
+    color: $primary-color-text;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 32px;
+  }
+
+  .footer__register {
+    border: 5px solid #ffffff;
+    font-size: 32px;
+    color: $primary-color-text;
+    background-color: $primary-color;
+    border-radius: 20px;
+    width: 230px;
+    height: 60px;
+  }
 }
 </style>

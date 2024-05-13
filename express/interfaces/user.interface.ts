@@ -2,6 +2,7 @@ export interface IUser {
   userId: string;
   name: string;
   email: string;
+  registrationDate: string;
   likesCount: number;
   avatarURL?: string;
   bio?: string;

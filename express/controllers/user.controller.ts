@@ -33,13 +33,22 @@ export default class UserController {
       const ipAddress = req.ip ?? 'Неизвестный IP';
       const deviceType = req.headers['user-agent'] ?? 'Неизвестное устройство';
 
-      await this.userCreationService.createUser(
+      const newUser = await this.userCreationService.createUser(
         userData,
         ipAddress,
         deviceType,
       );
 
-      res.json({ message: 'Пользователь успешно создан' });
+      res.cookie('access_token', newUser.accessToken, {
+        httpOnly: true,
+        maxAge: 30 * 60 * 1000,
+      });
+
+      res.json({
+        message: 'Пользователь успешно создан',
+        user: newUser,
+        accessToken: newUser.accessToken,
+      });
     } catch (error) {
       if (error.code === '23505') {
         res
@@ -121,10 +130,21 @@ export default class UserController {
 
   async getUser(req: Request, res: Response): Promise<void> {
     try {
-      const userId = req.params.userId;
-      const user = await this.userRepository.getUser(userId);
+      const username = req.params.username;
+      const currentUser = req.user;
+      const user = await this.userRepository.getUser(username);
 
-      res.json(user);
+      if (currentUser && currentUser.userId === user.userId) {
+        res.json({ user, isMyProfile: true });
+      } else {
+        const publicUserData = {
+          name: user.name,
+          registrationDate: user.registrationDate,
+          avatarURL: user.avatarURL,
+          bio: user.bio,
+        };
+        res.json({ user: publicUserData, isMyProfile: false });
+      }
     } catch (error) {
       res.status(500).json({ error: 'Ошибка при получении пользователя' });
     }

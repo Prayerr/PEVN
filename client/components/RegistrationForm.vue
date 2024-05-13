@@ -1,20 +1,15 @@
-/* TODO: ДОДЕЛАТЬ ВЕЗДЕ ОБРАБОТКУ ОШИБОК (ну то есть вывод ошибок на фронте),
-ПОФИКСИТЬ КОД */
 <template>
   <section class="registration">
     <header>
       <h1 class="registration__title">Register</h1>
-      <h2 class="registration__subtitle">
-        Want to become part of the community? Fill in the details
-      </h2>
     </header>
     <form class="registration-form" @submit.prevent="submitForm">
-      <label class="registration-form__label" for="name">name</label>
+      <label class="registration-form__label" for="username">username</label>
       <input
         v-model="user.name"
         class="registration-form__input"
         type="text"
-        id="name"
+        id="username"
         required
       />
 
@@ -37,41 +32,40 @@
         required
       />
 
-      <label class="registration-form__label" for="confirm-password">
-        confirm password
+      <label class="registration-form__label" for="password-confirm">
+        password confirm
       </label>
       <input
         v-model="user.confirmPassword"
         @input="checkPasswordMatch"
         class="registration-form__input"
         type="password"
-        id="confirm-password"
+        id="password-confirm"
         required
       />
 
-      <p v-if="passwordsDoNotMatch" class="error-message">
+      <button type="submit" class="registration-form__button">confirm</button>
+
+      <p v-if="passwordsDoNotMatch" class="registration-form__error">
         Пароли не совпадают
       </p>
-      <p v-if="registrationError" class="error-message">
+
+      <p v-if="registrationError" class="registration-form__error">
         {{ registrationError }}
       </p>
-
-      <input type="checkbox" id="terms-checkbox" required />
-      <label for="terms-checkbox" class="registration-form__checkbox-label">
-        I agree with the
-        <span class="registration-form__terms-link">
-          <a href="link">terms</a>
-        </span>
-        of use of the service
-      </label>
-
-      <button type="submit" class="registration-form__button">done</button>
-
-      <footer>
-        <router-link to="/auth">I already have an account</router-link>
-      </footer>
     </form>
   </section>
+
+  <footer>
+    <label for="terms-checkbox" class="registration-form__checkbox-label">
+      I agree with the
+      <span class="registration-form__terms-link">
+        <a href="link">terms</a>
+      </span>
+      of use of the service
+    </label>
+    <input type="checkbox" id="terms-checkbox" required />
+  </footer>
 </template>
 
 <script setup lang="ts">
@@ -112,7 +106,7 @@ const submitForm = async () => {
     });
 
     if (response.status === 200) {
-      router.push('/profile');
+      router.push(`/profile/${user.value.name}`);
     }
 
     console.log(response.data.message);
@@ -130,46 +124,60 @@ const submitForm = async () => {
 @import '../src/styles/global.scss';
 
 .registration {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border: 5px $primary-color dotted;
-}
+  background-color: $primary-color;
+  color: $primary-color-text;
+  max-width: 725px;
+  height: 600px;
+  border-radius: 15px;
+  padding: 20px;
 
-.registration-form__terms-link {
-  font-weight: bold;
-  a {
-    text-decoration: none;
+  h1 {
+    margin: 0;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    font-size: 44px;
   }
 }
 
-.error-message {
-  color: red;
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .registration-form__label {
+    font-size: $form-font-size;
+  }
+
+  .registration-form__input {
+    @include input-style;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .registration-form__button {
+    @include button-style;
+    width: 50%;
+    height: 85px;
+    align-self: flex-start;
+  }
 }
 
-.registration-form__label,
-.registration-form__checkbox-label {
-  color: $primary-color;
-  font-size: $form-font-size;
-}
+footer {
+  margin-top: 10px;
+  padding: 15px;
+  border-radius: 15px;
+  background-color: $primary-color;
 
-.registration-form__button {
-  color: $primary-color;
-}
+  .registration-form__checkbox-label {
+    color: $primary-color-text;
+    font-size: 28px;
+  }
 
-.registration-form__input {
-  border: 3px solid $primary-color;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-.registration-form__button {
-  border: 3px solid $primary-color;
-  border-radius: 5px;
-  width: 100px;
-  height: 276px;
+  a {
+    font-size: 28px;
+    color: $primary-color-text;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
 </style>

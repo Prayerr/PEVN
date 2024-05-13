@@ -1,6 +1,35 @@
-$primary-color: #94bfa7;
-$form-font-size: 18;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+$primary-color: #071013;
+$primary-color-text: #ffffff;
+$navbar-main-color: #2f2f2f;
+$form-font-size: 24px;
+
+* {
+  font-size: 18px;
+  font-family: 'Montserrat', sans-serif;
+}
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin input-style {
+  background-color: transparent;
+  border: 5px solid #ffffff;
+  color: #ffffff;
+  border-radius: 15px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+@mixin button-style {
+  background-color: transparent;
+  color: $primary-color-text;
+  border: 5px solid #ffffff;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 48px;
+  cursor: pointer;
 }

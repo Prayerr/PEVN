@@ -73,10 +73,10 @@ export default class UserRepository
     }
   }
 
-  async getUser(userId: string): Promise<User | null> {
+  async getUser(username: string): Promise<User | null> {
     const getUserQuery = {
-      text: 'SELECT account_id, avatar_url, name, email, bio FROM account_info WHERE account_id = $1',
-      values: [userId],
+      text: 'SELECT account_id, name, email, registration_date, avatar_url, bio FROM account_info WHERE name = $1',
+      values: [username],
     };
     try {
       const result = await this.startQuery(getUserQuery);
@@ -89,15 +89,15 @@ export default class UserRepository
       const user = new User(
         userData.name,
         userData.email,
-        userData.bio,
+        userData.registration_date,
         userData.avatar_url,
+        userData.bio,
       );
 
       user.userId = userData.account_id;
       return user;
     } catch (error) {
       console.error('Ошибка при получении пользователя:', error.message);
-      console.error('Код ошибки:', error.code);
       throw error;
     }
   }

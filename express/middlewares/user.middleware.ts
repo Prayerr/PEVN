@@ -11,8 +11,8 @@ export async function checkUserExists(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const userId = req.params.userId;
-    const user = await userRepository.getUser(userId);
+    const username = req.params.username;
+    const user = await userRepository.getUser(username);
 
     if (!user) {
       res.status(404).json({ error: 'Пользователь не найден' });
@@ -35,7 +35,7 @@ export async function checkToken(
   const accessToken = authHeader?.split(' ')?.[1];
 
   if (!accessToken) {
-    return next(res.json('Не авторизован'));
+    return next(res.status(401).json({ error: 'Не авторизован' }));
   }
 
   try {

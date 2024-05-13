@@ -15,7 +15,7 @@ export interface IUserCreateService {
     userData: IUserDTO,
     ipAddress: string,
     deviceType: string,
-  ): Promise<void>;
+  ): Promise<{ userId: string; accessToken: string }>;
 }
 
 export interface ITokenService {

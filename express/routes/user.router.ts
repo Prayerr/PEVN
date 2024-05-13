@@ -71,9 +71,9 @@ userRouter.delete(
 );
 
 userRouter.get(
-  '/:userId',
+  '/:username',
   checkUserExists,
-  checkToken,
+
   async (req: Request, res: Response) => {
     await userController.getUser(req, res);
   },

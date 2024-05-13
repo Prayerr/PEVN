@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import RegistrationForm from '../components/RegistrationForm.vue';
 import AuthForm from '../components/AuthForm.vue';
-import Profile from '../components/UserMain.vue';
+import NavBar from '../components/NavBar.vue';
+import UserProfile from '../components/UserProfile.vue';
+import RegistrationForm from '../components/RegistrationForm.vue';
 
 const routes = [
   {
@@ -16,9 +17,14 @@ const routes = [
     component: AuthForm,
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: Profile,
+    path: '/profile/:username',
+    name: 'UserProfile',
+    component: UserProfile,
+  },
+  {
+    path: '/temp',
+    name: 'temp',
+    component: NavBar,
   },
 ];
 

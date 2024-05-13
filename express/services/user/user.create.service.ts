@@ -34,7 +34,7 @@ export default class UserCreateService implements IUserCreateService {
     userData: IUserDTO,
     ipAddress: string,
     deviceType: string,
-  ): Promise<void> {
+  ): Promise<{ userId: string; accessToken: string }> {
     const { name, email, password, bio, avatarURL } = userData;
 
     const user = new User(name, email, bio, avatarURL);
@@ -44,18 +44,25 @@ export default class UserCreateService implements IUserCreateService {
     await userCredentials.generateUserCredentialsId();
     await userCredentials.hashPassword();
 
-    const userSession = new UserSession(
+    const userSession = new UserSession(user.userId, deviceType);
+    await userSession.generateSessionId();
+
+    const accessToken = await this.tokenService.generateAccessToken(
       user.userId,
-      deviceType,
-      this.tokenService,
+      email,
     );
-    await userSession.generateUserSessionId();
-    await userSession.generateToken(email);
+    const refreshToken = await this.tokenService.generateRefreshToken(
+      user.userId,
+      email,
+    );
 
     userSession.ipAddress = ipAddress;
+    userSession.token = refreshToken;
 
     await this.userRepository.saveUser(user);
-    await this.userCredentialsRepository.saveUserCredentials(userCredentials);
     await this.userSessionRepository.saveUserSession(userSession);
+    await this.userCredentialsRepository.saveUserCredentials(userCredentials);
+
+    return { userId: user.userId, accessToken };
   }
 }
