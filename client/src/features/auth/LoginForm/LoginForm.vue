@@ -1,11 +1,10 @@
 <template>
-  <AuthRedirectButtonVue />
   <section class="auth">
     <h1>login</h1>
-    <form class="auth-form" @submit.prevent="login">
+    <form class="auth-form" @submit.prevent="loginUser">
       <label class="auth-form__label" for="email">email</label>
       <input
-        v-model="email"
+        v-model="user.email"
         class="auth-form__input"
         type="text"
         id="email"
@@ -14,7 +13,7 @@
 
       <label class="auth-form__label" for="password">password</label>
       <input
-        v-model="password"
+        v-model="user.password"
         class="auth-form__input"
         type="password"
         id="password"
@@ -33,41 +32,34 @@
     <button class="footer__register">Register</button>
   </footer>
 
-  <InputWithLabel
-    label="email"
-    v-model="email"
-    inputType="text"
-    input-id="email"
-    labelClass="auth-form__label"
-    required
-  />
-
-  <p v-if="authError" class="error-message">{{ authError }}</p>
+  <ErrorMessage :errorMessage="authError" />
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import axios from 'axios';
-import AuthRedirectButtonVue from './AuthRedirectButton.vue';
+import httpClient from '../../../shared/api';
 
-const email = ref('');
-const password = ref('');
+const user = ref({
+  email: '',
+  password: '',
+});
+
 const authError = ref('');
 
 const router = useRouter();
 
-const login = async () => {
+const loginUser = async () => {
   try {
-    const response = await axios.post('/profile/login', {
-      email: email.value,
-      password: password.value,
+    const response = await httpClient.post('/profile/login', {
+      email: user.value.email,
+      password: user.value.password,
     });
 
     if (response.status === 200) {
       router.push(`/profile/${response.data.user.name}`);
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.response.status === 404) {
       authError.value = 'Пользователь не найден';
     } else if (error.response.status === 401) {
@@ -80,16 +72,8 @@ const login = async () => {
 };
 </script>
 
-<style lang="scss">
-@import '../src/styles/global.scss';
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 700px;
-  font-weight: 600;
-}
+<style scoped lang="scss">
+@import '../../../app/global.scss';
 
 .auth {
   background-color: $primary-color;

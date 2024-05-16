@@ -3,7 +3,7 @@
     <header>
       <h1 class="registration__title">Register</h1>
     </header>
-    <form class="registration-form" @submit.prevent="submitForm">
+    <form class="registration-form" @submit.prevent="loginUser">
       <label class="registration-form__label" for="username">username</label>
       <input
         v-model="user.name"
@@ -25,7 +25,6 @@
       <label class="registration-form__label" for="password">password</label>
       <input
         v-model="user.password"
-        @input="checkPasswordMatch"
         class="registration-form__input"
         type="password"
         id="password"
@@ -37,7 +36,6 @@
       </label>
       <input
         v-model="user.confirmPassword"
-        @input="checkPasswordMatch"
         class="registration-form__input"
         type="password"
         id="password-confirm"
@@ -45,14 +43,6 @@
       />
 
       <button type="submit" class="registration-form__button">confirm</button>
-
-      <p v-if="passwordsDoNotMatch" class="registration-form__error">
-        Пароли не совпадают
-      </p>
-
-      <p v-if="registrationError" class="registration-form__error">
-        {{ registrationError }}
-      </p>
     </form>
   </section>
 
@@ -71,7 +61,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import axios from 'axios';
+import httpClient from '../../../shared/api';
 
 const user = ref({
   name: '',
@@ -80,25 +70,11 @@ const user = ref({
   confirmPassword: '',
 });
 
-const registrationError = ref('');
-const passwordsDoNotMatch = ref(false);
 const router = useRouter();
 
-const checkPasswordMatch = () => {
-  passwordsDoNotMatch.value =
-    user.value.password !== user.value.confirmPassword;
-};
-
-const submitForm = async () => {
+const loginUser = async () => {
   try {
-    if (user.value.password !== user.value.confirmPassword) {
-      passwordsDoNotMatch.value = true;
-      return;
-    }
-
-    passwordsDoNotMatch.value = false;
-
-    const response = await axios.post('/profile/register', {
+    const response = await httpClient.post('/profile/register', {
       name: user.value.name,
       email: user.value.email,
       password: user.value.password,
@@ -110,9 +86,9 @@ const submitForm = async () => {
     }
 
     console.log(response.data.message);
-  } catch (error) {
+  } catch (error: any) {
     if (error.response.status === 409) {
-      registrationError.value = error.response.data.error;
+      errorMessage.value = error.response.data.error;
     } else {
       console.error('Ошибка при регистрации:', error);
     }
@@ -120,8 +96,8 @@ const submitForm = async () => {
 };
 </script>
 
-<style lang="scss">
-@import '../src/styles/global.scss';
+<style scoped lang="scss">
+@import '../../../app/global.scss';
 
 .registration {
   background-color: $primary-color;
