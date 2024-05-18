@@ -1,15 +1,17 @@
-import { userValidationRules } from '../utils/validation/validation.rules';
 import { Router, Response, Request } from 'express';
-import { checkUserExists, checkToken } from '../middlewares/user.middleware';
+import {
+  checkUserExists,
+  checkToken,
+  validateUser,
+} from '../middlewares/user.middleware';
+import UserController from '../controllers/user.controller';
 import TokenRepository from '../repositories/user/session.repository';
 import UserRepository from '../repositories/user/user.repository';
 import UserSessionRepository from '../repositories/user/session.repository';
 import UserCredentialsRepository from '../repositories/user/credentials.repository';
 import TokenService from '../services/user/user.token.service';
-import UserController from '../controllers/user.controller';
 import UserCreateService from '../services/user/user.create.service';
 import AuthService from '../services/user/user.auth.service';
-import validationErrorHandler from '../utils/validation/validation.error.handler';
 
 const userRouter = Router();
 
@@ -35,14 +37,13 @@ const userController = new UserController(
 
 userRouter.post(
   '/register',
-  userValidationRules,
-  validationErrorHandler,
+  validateUser,
   async (req: Request, res: Response) => {
     await userController.createUser(req, res);
   },
 );
 
-userRouter.post('/login', async (req, res) => {
+userRouter.post('/login', async (req: Request, res: Response) => {
   await userController.loginUser(req, res);
 });
 
@@ -57,11 +58,13 @@ userRouter.post('/refresh', checkToken, async (req: Request, res: Response) => {
 userRouter.put(
   '/:userId/update',
   checkUserExists,
+  validateUser,
   async (req: Request, res: Response) => {
     await userController.updateUser(req, res);
   },
 );
 
+// TODO: Проработать логику того чтобы пользователь не смог удалить чужой профиль
 userRouter.delete(
   '/:userId/delete',
   checkUserExists,
@@ -73,7 +76,7 @@ userRouter.delete(
 userRouter.get(
   '/:username',
   checkUserExists,
-
+  checkToken,
   async (req: Request, res: Response) => {
     await userController.getUser(req, res);
   },

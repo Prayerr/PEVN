@@ -5,14 +5,17 @@
 <script lang="ts"></script>
 
 <style lang="scss">
+@import '@/app/styles/main.scss';
+
 .auth-redirect-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 20px;
-  color: #000000;
+  font-weight: 600;
+  color: $typography-dark-color;
   text-decoration: none;
   cursor: pointer;
   font-size: 48px;
+
+  &:hover {
+    @include gradient-animation-hover;
+  }
 }
 </style>

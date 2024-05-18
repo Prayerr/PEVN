@@ -1,4 +1,4 @@
-import { IQuery } from '../interfaces/service.interface';
+import { IQuery } from '../interfaces';
 import pool from '../db/pool';
 
 export default class MainRepository {
@@ -26,9 +26,7 @@ export default class MainRepository {
       return result;
     } catch (error) {
       await client.query('ROLLBACK');
-      const errorDB = new Error(`Ошибка выполнения запроса: ${error.message}`);
-      errorDB.code = error.code;
-      throw errorDB;
+      throw error;
     } finally {
       client.release();
     }

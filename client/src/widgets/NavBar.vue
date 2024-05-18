@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import IconProfile from '../shared/ui/icons/Navbar/IconProfile.vue';
-import IconHome from '../shared/ui/icons/Navbar/IconHome.vue';
+import IconProfile from '@/shared/ui/icons/Navbar/IconProfile.vue';
+import IconHome from '@/shared/ui/icons/Navbar/IconHome.vue';
 </script>
 
 <style scoped lang="scss">
-@import '../app/global.scss';
+@import '@/app/styles/main.scss';
 
 .navbar {
   position: fixed;
@@ -54,7 +54,7 @@ import IconHome from '../shared/ui/icons/Navbar/IconHome.vue';
     margin-right: 30px;
 
     &:hover {
-      color: #4e31ff;
+      color: $icon-hover-color;
       transition: color 0.3s ease-in-out;
     }
 
@@ -63,18 +63,12 @@ import IconHome from '../shared/ui/icons/Navbar/IconHome.vue';
       margin: 0 25px;
 
       &:hover {
-        color: transparent;
-        transition: color 0.3s ease-in-out;
-        -webkit-background-clip: text;
-        background-clip: text;
-        background-image: linear-gradient(90deg, #41ddff 0.45%, #4e31ff 52.76%);
-        background-size: 200% 200%;
-        animation: changeGradient 10s ease infinite;
+        @include gradient-animation-hover;
       }
     }
 
     &:not(:hover) {
-      color: #ffffff;
+      color: $typography-light-color;
       transition: color 0.3s ease-in-out;
     }
   }
@@ -83,19 +77,6 @@ import IconHome from '../shared/ui/icons/Navbar/IconHome.vue';
 .navbar__list a {
   color: #ffffff;
   text-decoration: none;
-}
-
-.navbar__logo {
-  border: none;
-  margin-right: 3%;
-  background-color: #ffffff;
-  cursor: pointer;
-}
-
-.navbar__login {
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
 }
 
 .navbar__item--profile {

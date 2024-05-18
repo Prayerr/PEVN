@@ -2,12 +2,11 @@ import { Response, Request } from 'express';
 import {
   IUserRepository,
   IUserCredentialsRepository,
-} from '../interfaces/repository.interface';
-import {
   IUserCreateService,
   IAuthService,
-} from '../interfaces/service.interface';
-import { IUserDTO } from '../interfaces/user.interface';
+  IUserDTO,
+  IPublicUser,
+} from '../interfaces';
 
 export default class UserController {
   private userCreationService: IUserCreateService;
@@ -27,6 +26,24 @@ export default class UserController {
     this.authService = authService;
   }
 
+  // Форматирование получаемых данных о пользователе в зависимости от того кто их запрашивает
+  private formatUserForResponse(
+    user: IUserDTO,
+    currentUser: IUserDTO,
+  ): IUserDTO | (IPublicUser & { isMyProfile: boolean }) {
+    const isMyProfile = currentUser && currentUser.userId === user.userId;
+    return isMyProfile
+      ? { ...user, isMyProfile: true }
+      : {
+          name: user.name,
+          registrationDate: user.registrationDate ?? '',
+          avatarURL: user.avatarURL ?? null,
+          bio: user.bio ?? null,
+          isMyProfile: false,
+        };
+  }
+
+  // Метод контроллера ответственный за создание (регистрацию) пользователя
   async createUser(req: Request, res: Response): Promise<void> {
     try {
       const userData = req.body as IUserDTO;
@@ -60,6 +77,7 @@ export default class UserController {
     }
   }
 
+  // Метод контроллера ответственный за вход пользователя
   async loginUser(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
 
@@ -93,6 +111,7 @@ export default class UserController {
     res.json(tokens);
   }
 
+  // Метод контроллера ответственный за выход пользователя
   async logoutUser(req: Request, res: Response): Promise<void> {
     try {
       res.clearCookie('access_token');
@@ -103,6 +122,7 @@ export default class UserController {
     }
   }
 
+  // Метод контроллера ответственный за обновление данных о пользователе
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.params.userId;
@@ -116,6 +136,7 @@ export default class UserController {
     }
   }
 
+  // Метод контроллера ответственный за удаление пользователя
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.params.userId;
@@ -128,28 +149,23 @@ export default class UserController {
     }
   }
 
+  // Метод контроллера ответственный за получение данных о пользователе по его юзернейму
   async getUser(req: Request, res: Response): Promise<void> {
     try {
       const username = req.params.username;
       const currentUser = req.user;
-      const user = await this.userRepository.getUser(username);
 
-      if (currentUser && currentUser.userId === user.userId) {
-        res.json({ user, isMyProfile: true });
-      } else {
-        const publicUserData = {
-          name: user.name,
-          registrationDate: user.registrationDate,
-          avatarURL: user.avatarURL,
-          bio: user.bio,
-        };
-        res.json({ user: publicUserData, isMyProfile: false });
-      }
+      const user = await this.userRepository.getUser(username, null);
+
+      const formattedUser = this.formatUserForResponse(user, currentUser);
+
+      res.json({ user: formattedUser });
     } catch (error) {
       res.status(500).json({ error: 'Ошибка при получении пользователя' });
     }
   }
 
+  // Метод контроллера обновление токенов
   async refreshTokens(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.user.userId;

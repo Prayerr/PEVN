@@ -1,4 +1,4 @@
-import { IUser } from '../../interfaces/user.interface';
+import { IUser } from '../../interfaces';
 import generateUUID from '../../utils/common/uuid.generator';
 
 export default class User implements IUser {

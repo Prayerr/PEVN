@@ -1,4 +1,4 @@
-import { IUserCredentials } from '../../interfaces/user.interface';
+import { IUserCredentials } from '../../interfaces';
 import hashPassword from '../../utils/user/hash.generator';
 import generateUUID from '../../utils/common/uuid.generator';
 

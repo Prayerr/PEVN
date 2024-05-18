@@ -1,4 +1,4 @@
-import { IUserSession } from '../../interfaces/user.interface';
+import { IUserSession } from '../../interfaces';
 import generateUUID from '../../utils/common/uuid.generator';
 
 export default class UserSession implements IUserSession {

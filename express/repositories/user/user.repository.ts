@@ -1,4 +1,5 @@
-import { IUserRepository } from '../../interfaces/repository.interface';
+import { IUserRepository } from '../../interfaces';
+import { errorHandlerRepositories } from '../../utils/common/error.handlers';
 import User from '../../models/user/user.model';
 import MainRepository from '../main.repository';
 
@@ -17,12 +18,11 @@ export default class UserRepository
         user.bio || null,
       ],
     };
+
     try {
       await this.startQuery(saveUserQuery);
-    } catch (error) {
-      console.error('Ошибка при сохранении пользователя:', error.message);
-      console.error('Код ошибки:', error.code);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при сохранении пользователя');
     }
   }
 
@@ -39,10 +39,8 @@ export default class UserRepository
     };
     try {
       await this.startQuery(updateQuery);
-    } catch (error) {
-      console.error('Ошибка при обновлении пользователя:', error.message);
-      console.error('Код ошибки:', error.code);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при обновлении пользователя');
     }
   }
 
@@ -66,18 +64,24 @@ export default class UserRepository
       for (const deleteQuery of deleteQueries) {
         await this.startQuery(deleteQuery);
       }
-    } catch (error) {
-      console.error('Ошибка при удалении пользователя:', error.message);
-      console.error('Код ошибки:', error.code);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при удалении пользователя');
     }
   }
 
-  async getUser(username: string): Promise<User | null> {
+  // TODO: Возможно, лучше разделить на методы getUserById и getUserByName
+  async getUser(
+    username: string | null,
+    userId: string | null,
+  ): Promise<User | null> {
     const getUserQuery = {
-      text: 'SELECT account_id, name, email, registration_date, avatar_url, bio FROM account_info WHERE name = $1',
-      values: [username],
+      text: `SELECT account_id, name, email, registration_date, avatar_url, bio
+             FROM account_info
+             WHERE (name = $1 OR $1 IS NULL)
+               AND (account_id = $2 OR $2 IS NULL)`,
+      values: [username, userId],
     };
+
     try {
       const result = await this.startQuery(getUserQuery);
 
@@ -96,9 +100,8 @@ export default class UserRepository
 
       user.userId = userData.account_id;
       return user;
-    } catch (error) {
-      console.error('Ошибка при получении пользователя:', error.message);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при получении пользователя');
     }
   }
 }

@@ -1,13 +1,11 @@
-import { IUserDTO } from '../../interfaces/user.interface';
 import {
+  IUserDTO,
   ITokenService,
   IUserCreateService,
-} from '../../interfaces/service.interface';
-import {
   IUserSessionRepository,
   IUserCredentialsRepository,
   IUserRepository,
-} from '../../interfaces/repository.interface';
+} from '../../interfaces';
 import User from '../../models/user/user.model';
 import UserSession from '../../models/user/user.session';
 import UserCredentials from '../../models/user/user.credentials';

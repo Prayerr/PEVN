@@ -4,7 +4,10 @@ export interface IUserRepository {
   saveUser(user: IUser): Promise<void>;
   updateUser(userId: string, newData: Partial<IUser>): Promise<void>;
   deleteUser(userId: string): Promise<void>;
-  getUser(username: string): Promise<IUser | null>;
+  getUser(
+    username: string | null,
+    userId: string | null,
+  ): Promise<IUser | null>;
 }
 
 export interface IUserSessionRepository {

@@ -28,8 +28,7 @@
   </section>
 
   <footer>
-    <router-link to="/register" class="footer__link">no account?</router-link>
-    <button class="footer__register">Register</button>
+    <router-link to="/register" class="footer__link">Registration</router-link>
   </footer>
 
   <ErrorMessage :errorMessage="authError" />
@@ -38,7 +37,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import httpClient from '../../../shared/api';
+import httpClient from '@/shared/api';
 
 const user = ref({
   email: '',
@@ -73,11 +72,11 @@ const loginUser = async () => {
 </script>
 
 <style scoped lang="scss">
-@import '../../../app/global.scss';
+@import '@/app/styles/main.scss';
 
 .auth {
   background-color: $primary-color;
-  color: $primary-color-text;
+  color: $typography-light-color;
   border-radius: 15px;
   padding: 20px;
   width: 645px;
@@ -98,9 +97,14 @@ const loginUser = async () => {
 .auth-form__button {
   @include button-style;
   margin: 0 auto;
-  display: block;
+  text-align: center;
+  font-size: 48px;
   width: 260px;
   height: 75px;
+
+  &:hover {
+    @include button-animation-hover;
+  }
 }
 
 .auth-form__link {
@@ -129,25 +133,17 @@ const loginUser = async () => {
 footer {
   margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 15px;
   border-radius: 15px;
   background-color: $primary-color;
 
   .footer__link {
-    color: $primary-color-text;
+    @include button-style;
+    text-align: center;
     text-decoration: none;
-    cursor: pointer;
     font-size: 32px;
-  }
-
-  .footer__register {
-    border: 5px solid #ffffff;
-    font-size: 32px;
-    color: $primary-color-text;
-    background-color: $primary-color;
-    border-radius: 20px;
     width: 230px;
     height: 60px;
   }

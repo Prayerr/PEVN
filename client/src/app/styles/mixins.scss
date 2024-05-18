@@ -1,0 +1,31 @@
+@mixin input-style {
+  background-color: transparent;
+  color: $typography-light-color;
+  border: 5px solid #ffffff;
+  border-radius: 15px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+@mixin button-style {
+  background-color: transparent;
+  color: $typography-light-color;
+  border: 5px solid #ffffff;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@mixin button-animation-hover {
+  background-color: #293133;
+}
+
+@mixin gradient-animation-hover {
+  color: transparent;
+  transition: color 0.3s ease-in-out;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: $logo-gradient;
+  background-size: 200% 200%;
+  animation: changeGradient 10s ease infinite;
+}

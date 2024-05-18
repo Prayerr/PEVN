@@ -12,8 +12,17 @@ export interface IUserDTO {
   name: string;
   email: string;
   password: string;
+  userId?: string;
   bio?: string;
   avatarURL?: string;
+  registrationDate?: string;
+}
+
+export interface IPublicUser {
+  name: string;
+  registrationDate: string;
+  avatarURL: string | null;
+  bio: string | null;
 }
 
 export interface IUserCredentials {

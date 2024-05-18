@@ -1,4 +1,5 @@
-import { IUserSessionRepository } from '../../interfaces/repository.interface';
+import { IUserSessionRepository } from '../../interfaces';
+import { errorHandlerRepositories } from '../../utils/common/error.handlers';
 import UserSession from '../../models/user/user.session';
 import MainRepository from '../main.repository';
 
@@ -19,12 +20,11 @@ export default class UserSessionRepository
     };
     try {
       await this.startQuery(saveUserSessionQuery);
-    } catch (error) {
-      console.error(
-        'Ошибка при сохранении сеанса пользователя:',
-        error.message,
+    } catch (error: unknown) {
+      errorHandlerRepositories(
+        error,
+        'Ошибка при обновлении сессии пользователя',
       );
-      throw error;
     }
   }
 
@@ -41,9 +41,8 @@ export default class UserSessionRepository
       }
 
       return result.rows[0].refresh_token;
-    } catch (error) {
-      console.error('Ошибка при получении refresh token:', error.message);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при получении refresh token:');
     }
   }
 
@@ -57,9 +56,8 @@ export default class UserSessionRepository
     };
     try {
       await this.startQuery(updateRefreshTokenQuery);
-    } catch (error) {
-      console.error('Ошибка при обновлении refresh token:', error.message);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при обновлении refresh token:');
     }
   }
 
@@ -70,9 +68,8 @@ export default class UserSessionRepository
     };
     try {
       await this.startQuery(deleteSessionQuery);
-    } catch (error) {
-      console.error('Ошибка при удалении refresh token:', error.message);
-      throw error;
+    } catch (error: unknown) {
+      errorHandlerRepositories(error, 'Ошибка при удалении refresh token:');
     }
   }
 }

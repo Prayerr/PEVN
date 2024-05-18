@@ -1,6 +1,6 @@
-import PageLogin from '@pages/PageLogin.vue';
-import PageRegistration from '@pages/PageRegistration.vue';
-import NavBar from '../../widgets/NavBar.vue';
+import PageLogin from '@/pages/PageLogin.vue';
+import PageRegistration from '@/pages/PageRegistration.vue';
+import NavBar from '@/widgets/NavBar.vue';
 
 const routes = [
   {

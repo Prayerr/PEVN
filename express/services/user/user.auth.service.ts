@@ -2,8 +2,9 @@ import {
   ITokenService,
   ITokenPayload,
   IAuthService,
-} from '../../interfaces/service.interface';
-import { IUserSessionRepository } from '../../interfaces/repository.interface';
+  IUserSessionRepository,
+} from '../../interfaces';
+import { errorHandler } from '../../utils/common/error.handlers';
 import bcrypt from 'bcrypt';
 
 export default class AuthService implements IAuthService {
@@ -30,7 +31,7 @@ export default class AuthService implements IAuthService {
       const decoded = await this.tokenService.verifyAccessToken(accessToken);
       return decoded;
     } catch (error) {
-      throw new Error('Недействительный access токен');
+      errorHandler(error, 'Недействительный access токен');
     }
   }
 
@@ -39,7 +40,7 @@ export default class AuthService implements IAuthService {
       const decoded = await this.tokenService.verifyRefreshToken(refreshToken);
       return decoded;
     } catch (error) {
-      throw new Error('Недействительный refresh токен');
+      errorHandler(error, 'Недействительный refresh токен');
     }
   }
 

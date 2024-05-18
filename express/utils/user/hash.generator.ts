@@ -7,5 +7,5 @@ export default async function hashPassword(password: string): Promise<string> {
 
   const saltRounds: number = parseInt(process.env.SALT_ROUNDS);
 
-  return await bcrypt.hashSync(password, saltRounds);
+  return await bcrypt.hash(password, saltRounds);
 }

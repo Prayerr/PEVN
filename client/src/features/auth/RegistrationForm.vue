@@ -1,7 +1,7 @@
 <template>
   <section class="registration">
     <header>
-      <h1 class="registration__title">Register</h1>
+      <h1 class="registration__title">Registration</h1>
     </header>
     <form class="registration-form" @submit.prevent="loginUser">
       <label class="registration-form__label" for="username">username</label>
@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import httpClient from '../../../shared/api';
+import httpClient from '@/shared/api';
 
 const user = ref({
   name: '',
@@ -74,6 +74,9 @@ const router = useRouter();
 
 const loginUser = async () => {
   try {
+    if (user.value.name.length < 3) {
+      return;
+    }
     const response = await httpClient.post('/profile/register', {
       name: user.value.name,
       email: user.value.email,
@@ -97,11 +100,11 @@ const loginUser = async () => {
 </script>
 
 <style scoped lang="scss">
-@import '../../../app/global.scss';
+@import '@/app/styles/main.scss';
 
 .registration {
   background-color: $primary-color;
-  color: $primary-color-text;
+  color: $typography-light-color;
   max-width: 725px;
   height: 600px;
   border-radius: 15px;
@@ -132,9 +135,14 @@ const loginUser = async () => {
 
   .registration-form__button {
     @include button-style;
+    font-size: 48px;
     width: 50%;
     height: 85px;
     align-self: flex-start;
+
+    &:hover {
+      @include button-animation-hover;
+    }
   }
 }
 
@@ -145,13 +153,13 @@ footer {
   background-color: $primary-color;
 
   .registration-form__checkbox-label {
-    color: $primary-color-text;
+    color: $typography-light-color;
     font-size: 28px;
   }
 
   a {
     font-size: 28px;
-    color: $primary-color-text;
+    color: $typography-light-color;
     text-decoration: none;
     cursor: pointer;
   }

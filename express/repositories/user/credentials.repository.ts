@@ -1,4 +1,5 @@
-import { IUserCredentialsRepository } from '../../interfaces/repository.interface';
+import { IUserCredentialsRepository } from '../../interfaces';
+import { errorHandlerRepositories } from '../../utils/common/error.handlers';
 import UserCredentials from '../../models/user/user.credentials';
 import MainRepository from '../main.repository';
 
@@ -17,12 +18,11 @@ export default class UserCredentialsRepository
     };
     try {
       await this.startQuery(saveUserCredentialsQuery);
-    } catch (error) {
-      console.error(
+    } catch (error: unknown) {
+      errorHandlerRepositories(
+        error,
         'Ошибка при сохранении учетных данных пользователя:',
-        error.message,
       );
-      throw error;
     }
   }
 
@@ -46,12 +46,11 @@ export default class UserCredentialsRepository
 
       userCredentials.userId = userData.account_id;
       return userCredentials;
-    } catch (error) {
-      console.error(
+    } catch (error: unknown) {
+      errorHandlerRepositories(
+        error,
         'Ошибка при получении пользователя по email:',
-        error.message,
       );
-      throw error;
     }
   }
 }

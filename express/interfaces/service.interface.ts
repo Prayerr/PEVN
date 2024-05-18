@@ -1,4 +1,4 @@
-import { IUserDTO } from './user.interface';
+import { IUserDTO } from '../interfaces';
 
 export interface ITokenPayload {
   userId: string;
