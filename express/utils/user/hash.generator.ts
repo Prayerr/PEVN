@@ -5,7 +5,7 @@ export default async function hashPassword(password: string): Promise<string> {
     throw new Error('Не удалось найти переменную окружения SALT_ROUNDS');
   }
 
-  const saltRounds: number = parseInt(process.env.SALT_ROUNDS);
+  const saltRounds: number = parseInt(process.env.SALT_ROUNDS, 10);
 
-  return await bcrypt.hash(password, saltRounds);
+  return bcrypt.hash(password, saltRounds);
 }

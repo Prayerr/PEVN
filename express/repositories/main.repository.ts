@@ -1,4 +1,5 @@
 import { IQuery } from '../interfaces';
+import logger from '../utils/common/logger';
 import pool from '../db/pool';
 
 export default class MainRepository {
@@ -12,7 +13,7 @@ export default class MainRepository {
 
       return client;
     } catch (error) {
-      console.error('Ошибка соединения с базой данных:', error);
+      logger.error('Ошибка соединения с базой данных:', error);
       throw error;
     }
   }

@@ -27,9 +27,9 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(import.meta.dirname, '..', 'dist', 'index.html'));
 });
 
-app.listen(PORT, (err?: Error) => {
-  if (err) {
-    console.log(err);
+app.listen(PORT, (error?: Error) => {
+  if (error) {
+    logger.error('Возникла ошибка', error);
   }
-  console.log(`PORT: ${PORT}`);
+  logger.info(`PORT: ${PORT}`);
 });

@@ -6,7 +6,7 @@ export function errorHandler(error: unknown, errorMessage: string): never {
     logger.error(`Произошла ошибка, ${error}: ${errorMessage}`);
     throw error;
   } else {
-    console.error(errorMessage, 'Неизвестная ошибка:', error);
+    logger.error(errorMessage, 'Неизвестная ошибка:', error);
     throw new Error(errorMessage);
   }
 }

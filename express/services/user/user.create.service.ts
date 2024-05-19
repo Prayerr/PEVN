@@ -11,10 +11,13 @@ import UserSession from '../../models/user/user.session';
 import UserCredentials from '../../models/user/user.credentials';
 
 export default class UserCreateService implements IUserCreateService {
-  private userSessionRepository: IUserSessionRepository;
-  private userCredentialsRepository: IUserCredentialsRepository;
-  private userRepository: IUserRepository;
-  private tokenService: ITokenService;
+  private readonly userSessionRepository: IUserSessionRepository;
+
+  private readonly userCredentialsRepository: IUserCredentialsRepository;
+
+  private readonly userRepository: IUserRepository;
+
+  private readonly tokenService: ITokenService;
 
   constructor(
     tokenService: ITokenService,

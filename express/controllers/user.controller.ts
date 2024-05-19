@@ -9,10 +9,13 @@ import {
 } from '../interfaces';
 
 export default class UserController {
-  private userCreationService: IUserCreateService;
-  private userRepository: IUserRepository;
-  private authService: IAuthService;
-  private userCredentialsRepository: IUserCredentialsRepository;
+  private readonly userCreationService: IUserCreateService;
+
+  private readonly userRepository: IUserRepository;
+
+  private readonly authService: IAuthService;
+
+  private readonly userCredentialsRepository: IUserCredentialsRepository;
 
   constructor(
     userCreationService: IUserCreateService,
@@ -64,7 +67,6 @@ export default class UserController {
       res.json({
         message: 'Пользователь успешно создан',
         user: newUser,
-        accessToken: newUser.accessToken,
       });
     } catch (error) {
       if (error.code === '23505') {
@@ -125,7 +127,7 @@ export default class UserController {
   // Метод контроллера ответственный за обновление данных о пользователе
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
-      const userId = req.params.userId;
+      const { userId } = req.params;
       const newData = req.body as IUserDTO;
 
       await this.userRepository.updateUser(userId, newData);
@@ -139,7 +141,7 @@ export default class UserController {
   // Метод контроллера ответственный за удаление пользователя
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
-      const userId = req.params.userId;
+      const { userId } = req.params;
 
       await this.userRepository.deleteUser(userId);
 
@@ -152,7 +154,7 @@ export default class UserController {
   // Метод контроллера ответственный за получение данных о пользователе по его юзернейму
   async getUser(req: Request, res: Response): Promise<void> {
     try {
-      const username = req.params.username;
+      const { username } = req.params;
       const currentUser = req.user;
 
       const user = await this.userRepository.getUser(username, null);
@@ -168,8 +170,8 @@ export default class UserController {
   // Метод контроллера обновление токенов
   async refreshTokens(req: Request, res: Response): Promise<void> {
     try {
-      const userId = req.user.userId;
-      const email = req.user.email;
+      const { userId } = req.user;
+      const { email } = req.user;
 
       const tokens = await this.authService.refreshTokens(userId, email);
 

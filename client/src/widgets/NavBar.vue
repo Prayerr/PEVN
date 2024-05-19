@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import IconProfile from '@/shared/ui/icons/Navbar/IconProfile.vue';
-import IconHome from '@/shared/ui/icons/Navbar/IconHome.vue';
+import IconProfile from '@/shared/ui/Icons/Navbar/IconProfile.vue';
+import IconHome from '@/shared/ui/Icons/Navbar/IconHome.vue';
 </script>
 
 <style scoped lang="scss">

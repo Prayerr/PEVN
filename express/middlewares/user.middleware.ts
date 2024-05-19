@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateUserSchema } from '../utils/validation/validation';
+import validateUserSchema from '../utils/validation/validation';
 import TokenService from '../services/user/user.token.service';
 import UserRepository from '../repositories/user/user.repository';
 
@@ -52,6 +52,8 @@ export async function checkToken(
   } catch (error: unknown) {
     res.status(403).json({ error: 'Недействительный access токен' });
   }
+
+  return Promise.resolve();
 }
 
 // Миддлвара для валидации данных JSON

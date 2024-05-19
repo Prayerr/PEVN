@@ -42,7 +42,10 @@ export default class UserSessionRepository
 
       return result.rows[0].refresh_token;
     } catch (error: unknown) {
-      errorHandlerRepositories(error, 'Ошибка при получении refresh token:');
+      return errorHandlerRepositories(
+        error,
+        'Ошибка при получении refresh token:',
+      );
     }
   }
 

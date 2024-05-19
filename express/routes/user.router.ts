@@ -5,7 +5,6 @@ import {
   validateUser,
 } from '../middlewares/user.middleware';
 import UserController from '../controllers/user.controller';
-import TokenRepository from '../repositories/user/session.repository';
 import UserRepository from '../repositories/user/user.repository';
 import UserSessionRepository from '../repositories/user/session.repository';
 import UserCredentialsRepository from '../repositories/user/credentials.repository';
@@ -18,9 +17,8 @@ const userRouter = Router();
 const userRepository = new UserRepository();
 const userSessionRepository = new UserSessionRepository();
 const userCredentialsRepository = new UserCredentialsRepository();
-const tokenRepository = new TokenRepository();
 const tokenService = new TokenService();
-const authService = new AuthService(tokenService, tokenRepository);
+const authService = new AuthService(tokenService, userSessionRepository);
 const userCreateService = new UserCreateService(
   tokenService,
   userSessionRepository,

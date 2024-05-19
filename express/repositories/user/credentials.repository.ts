@@ -47,7 +47,7 @@ export default class UserCredentialsRepository
       userCredentials.userId = userData.account_id;
       return userCredentials;
     } catch (error: unknown) {
-      errorHandlerRepositories(
+      return errorHandlerRepositories(
         error,
         'Ошибка при получении пользователя по email:',
       );

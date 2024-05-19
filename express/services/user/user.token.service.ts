@@ -1,5 +1,5 @@
-import { ITokenPayload, ITokenService } from '../../interfaces';
 import jwt from 'jsonwebtoken';
+import { ITokenPayload, ITokenService } from '../../interfaces';
 
 export default class TokenService implements ITokenService {
   async generateAccessToken(userId: string, email: string): Promise<string> {

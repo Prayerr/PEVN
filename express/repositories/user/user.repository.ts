@@ -61,9 +61,9 @@ export default class UserRepository
     ];
 
     try {
-      for (const deleteQuery of deleteQueries) {
+      deleteQueries.forEach(async (deleteQuery) => {
         await this.startQuery(deleteQuery);
-      }
+      });
     } catch (error: unknown) {
       errorHandlerRepositories(error, 'Ошибка при удалении пользователя');
     }
@@ -101,7 +101,10 @@ export default class UserRepository
       user.userId = userData.account_id;
       return user;
     } catch (error: unknown) {
-      errorHandlerRepositories(error, 'Ошибка при получении пользователя');
+      return errorHandlerRepositories(
+        error,
+        'Ошибка при получении пользователя',
+      );
     }
   }
 }

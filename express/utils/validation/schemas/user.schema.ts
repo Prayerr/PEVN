@@ -2,7 +2,7 @@ import { JSONSchemaType } from 'ajv';
 import { IUserDTO } from '../../../interfaces/user.interface';
 
 // JSON схема для пользователя
-export const userSchema: JSONSchemaType<IUserDTO> = {
+const userSchema: JSONSchemaType<IUserDTO> = {
   type: 'object',
 
   properties: {
@@ -21,3 +21,5 @@ export const userSchema: JSONSchemaType<IUserDTO> = {
 
   required: ['name', 'email', 'password'],
 };
+
+export default userSchema;
