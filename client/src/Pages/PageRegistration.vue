@@ -1,17 +1,10 @@
 <template>
-  <AuthRedirectButton />
-  <RegistrationForm />
+  <RegistrationForm2 />
 </template>
 
 <script setup lang="ts">
-import RegistrationForm from '@/features/auth/RegistrationForm.vue';
-import AuthRedirectButton from '@/shared/ui/Buttons/AuthRedirectButton.vue';
+//import RegistrationForm1 from '@/features/auth/Registration/RegistrationForm1.vue';
+import RegistrationForm2 from '@/features/auth/Registration/RegistrationForm2.vue';
 </script>
 
-<style lang="scss">
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
+<style lang="scss"></style>

@@ -1,6 +1,5 @@
 import PageLogin from '@/pages/PageLogin.vue';
 import PageRegistration from '@/pages/PageRegistration.vue';
-import NavBar from '@/widgets/NavBar.vue';
 
 const routes = [
   {
@@ -12,11 +11,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: PageLogin,
-  },
-  {
-    path: '/temp',
-    name: 'temp',
-    component: NavBar,
   },
 ];
 

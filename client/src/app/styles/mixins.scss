@@ -1,23 +1,32 @@
-@mixin input-style {
-  background-color: transparent;
-  color: $typography-light-color;
-  border: 5px solid #ffffff;
-  border-radius: 15px;
-  padding: 10px;
-  margin-bottom: 20px;
+@mixin input-hover {
+  background-color: var(--color__grey-light);
+  transition: background-color 0.2s ease-in-out;
 }
 
-@mixin button-style {
-  background-color: transparent;
-  color: $typography-light-color;
-  border: 5px solid #ffffff;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
+@mixin link-hover {
+  color: var(--color__hover);
+  transition: color 0.1s ease-in-out;
 }
 
-@mixin button-animation-hover {
-  background-color: #293133;
+@mixin button-registration-submit {
+  font-size: var(--size__font-xxl);
+  background:
+    linear-gradient(rgba(7, 16, 9), rgba(7, 16, 9)) padding-box,
+    var(--gradient__BlueRed) border-box;
+  border: 10px solid transparent;
+  border-radius: 100px;
+  width: 330px;
+  height: 100px;
+
+  span {
+    font-size: var(--size__font-xxl);
+    background: var(--gradient__BlueRed);
+    font-weight: 800;
+    text-align: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 @mixin gradient-animation-hover {
@@ -25,7 +34,7 @@
   transition: color 0.3s ease-in-out;
   -webkit-background-clip: text;
   background-clip: text;
-  background-image: $logo-gradient;
+  background-image: var(--gradient__AzureBlue);
   background-size: 200% 200%;
   animation: changeGradient 10s ease infinite;
 }

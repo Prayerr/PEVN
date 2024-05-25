@@ -83,9 +83,8 @@ export default class UserController {
   async loginUser(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
 
-    const userCredentials = await this.userCredentialsRepository.getUserByEmail(
-      email,
-    );
+    const userCredentials =
+      await this.userCredentialsRepository.getUserByEmail(email);
 
     if (!userCredentials) {
       res.status(404).json({ error: 'Пользователь не найден' });
