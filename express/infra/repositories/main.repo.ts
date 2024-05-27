@@ -5,12 +5,14 @@ import {
 } from '../../domain/interfaces';
 import { PoolClient, QueryResult } from 'pg';
 import { inject, injectable } from 'inversify';
-
+import TYPES from '../inversify/types';
 import pool from './pool';
 
 @injectable()
 export default class MainRepository implements IMainRepository {
-  constructor(@inject('IErrorHandler') private errorHandler: IErrorHandler) {}
+  constructor(
+    @inject(TYPES.IErrorHandler) private errorHandler: IErrorHandler,
+  ) {}
 
   async ensureConnection(): Promise<PoolClient> {
     try {

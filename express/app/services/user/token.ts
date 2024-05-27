@@ -1,6 +1,8 @@
-import jwt from 'jsonwebtoken';
+import { injectable } from 'inversify';
 import { ITokenPayload, ITokenService } from '../../../domain/interfaces';
+import jwt from 'jsonwebtoken';
 
+@injectable()
 export default class TokenService implements ITokenService {
   async generateAccessToken(userId: string, email: string): Promise<string> {
     const payload: ITokenPayload = { userId, email };

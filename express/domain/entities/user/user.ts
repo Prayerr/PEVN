@@ -2,7 +2,7 @@ import { IUser } from '../../interfaces';
 
 export default class User implements IUser {
   readonly userId: string;
-  readonly registrationDate: string;
+  readonly registrationDate?: string;
   username: string;
   email: string;
   avatarURL?: string;
@@ -12,7 +12,7 @@ export default class User implements IUser {
     userId: string,
     username: string,
     email: string,
-    registrationDate: string,
+    registrationDate?: string,
     bio?: string,
     avatarURL?: string,
   ) {

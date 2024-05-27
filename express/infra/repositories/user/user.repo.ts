@@ -5,12 +5,13 @@ import {
   IMainRepository,
 } from '../../../domain/interfaces';
 import User from '../../../domain/entities/user/user';
+import TYPES from '../../inversify/types';
 
 @injectable()
 export default class UserRepository implements IUserRepository {
   constructor(
-    @inject('IMainRepository') private mainRepository: IMainRepository,
-    @inject('IErrorHandler') private errorHandler: IErrorHandler,
+    @inject(TYPES.IMainRepository) private mainRepository: IMainRepository,
+    @inject(TYPES.IErrorHandler) private errorHandler: IErrorHandler,
   ) {}
 
   async saveUser(user: User): Promise<void> {

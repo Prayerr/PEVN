@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
 import bcrypt from 'bcrypt';
+import TYPES from '../../../infra/inversify/types';
 import {
   IErrorHandler,
   ITokenService,
@@ -11,10 +12,10 @@ import {
 @injectable()
 export default class AuthService implements IAuthService {
   constructor(
-    @inject('ITokenService') private tokenService: ITokenService,
-    @inject('IUserSessionRepository')
+    @inject(TYPES.ITokenService) private tokenService: ITokenService,
+    @inject(TYPES.IUserSessionRepository)
     private userSessionRepository: IUserSessionRepository,
-    @inject('IErrorHandler') private errorHandler: IErrorHandler,
+    @inject(TYPES.IErrorHandler) private errorHandler: IErrorHandler,
   ) {}
 
   async verifyPassword(

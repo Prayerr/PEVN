@@ -1,6 +1,5 @@
 import { inject } from 'inversify';
 import { Request, Response } from 'express';
-import IUserDTO from '../../app/dtos/user';
 import {
   controller,
   httpPost,
@@ -16,15 +15,17 @@ import {
   IUserCreateService,
   IAuthService,
 } from '../../domain/interfaces';
+import IUserDTO from '../../app/dtos/user';
+import TYPES from '../../infra/inversify/types';
 
 @controller('/profile')
-export default class UserController {
+export default class UserProfileController {
   constructor(
-    @inject('IUserCreateService')
+    @inject(TYPES.IUserCreateService)
     private userCreationService: IUserCreateService,
-    @inject('IUserRepository') private userRepository: IUserRepository,
-    @inject('IAuthService') private authService: IAuthService,
-    @inject('IUserCredentialsRepository')
+    @inject(TYPES.IUserRepository) private userRepository: IUserRepository,
+    @inject(TYPES.IAuthService) private authService: IAuthService,
+    @inject(TYPES.IUserCredentialsRepository)
     private userCredentialsRepository: IUserCredentialsRepository,
   ) {}
 
@@ -63,7 +64,7 @@ export default class UserController {
       });
 
       res.json({ message: 'Пользователь успешно создан', user: newUser });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === '23505') {
         res
           .status(409)
@@ -175,7 +176,7 @@ export default class UserController {
     }
   }
 
-  @httpPost('/refresh')
+  /* @httpPost('/refresh')
   async refreshTokens(
     @request() req: Request,
     @response() res: Response,
@@ -189,6 +190,6 @@ export default class UserController {
       res.json(tokens);
     } catch (error) {
       res.status(500).json({ error: 'Ошибка при обновлении токенов' });
-    }
-  }
+    } 
+  } */
 }

@@ -1,5 +1,7 @@
+// src/infra/inversify/container.config.ts
 import { Container } from 'inversify';
 import { TYPE } from 'inversify-express-utils';
+import TYPES from './types';
 import {
   IErrorHandler,
   ILogger,
@@ -9,6 +11,7 @@ import {
   IUserCredentialsRepository,
   ITokenService,
   IAuthService,
+  IUserCreateService,
 } from '../../domain/interfaces';
 
 import Logger from '../logger';
@@ -19,46 +22,54 @@ import UserSessionRepository from '../repositories/user/user.session.repo';
 import UserCredentialsRepository from '../repositories/user/user.credentials.repo';
 import TokenService from '../../app/services/user/token';
 import AuthService from '../../app/services/user/auth';
-import UserController from '../../http/user/user.controller';
+import UserCreateService from '../../app/services/user/user.create';
+import UserProfileController from '../../http/user/user.controller';
 
 const container = new Container();
 
 // Утилиты
-container.bind<ILogger>('ILogger').to(Logger).inSingletonScope();
+container.bind<ILogger>(TYPES.ILogger).to(Logger).inSingletonScope();
 container
-  .bind<IErrorHandler>('IErrorHandler')
+  .bind<IErrorHandler>(TYPES.IErrorHandler)
   .to(ErrorHandler)
   .inSingletonScope();
 
 // Репо
 container
-  .bind<IMainRepository>('IMainRepository')
+  .bind<IMainRepository>(TYPES.IMainRepository)
   .to(MainRepository)
   .inSingletonScope();
 container
-  .bind<IUserRepository>('IUserRepository')
+  .bind<IUserRepository>(TYPES.IUserRepository)
   .to(UserRepository)
   .inSingletonScope();
 container
-  .bind<IUserSessionRepository>('IUserSessionRepository')
+  .bind<IUserSessionRepository>(TYPES.IUserSessionRepository)
   .to(UserSessionRepository)
   .inSingletonScope();
 container
-  .bind<IUserCredentialsRepository>('IUserCredentialsRepository')
+  .bind<IUserCredentialsRepository>(TYPES.IUserCredentialsRepository)
   .to(UserCredentialsRepository)
   .inSingletonScope();
 
 // Сервисы
 container
-  .bind<ITokenService>('ITokenService')
+  .bind<ITokenService>(TYPES.ITokenService)
   .to(TokenService)
   .inSingletonScope();
-container.bind<IAuthService>('IAuthService').to(AuthService).inSingletonScope();
+container
+  .bind<IUserCreateService>(TYPES.IUserCreateService)
+  .to(UserCreateService)
+  .inSingletonScope();
+container
+  .bind<IAuthService>(TYPES.IAuthService)
+  .to(AuthService)
+  .inSingletonScope();
 
 // Контроллеры
 container
   .bind(TYPE.Controller)
-  .to(UserController)
-  .whenTargetNamed('UserController');
+  .to(UserProfileController)
+  .whenTargetNamed(TYPES.UserProfileController);
 
 export default container;

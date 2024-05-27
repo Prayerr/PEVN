@@ -5,14 +5,15 @@ import {
   IErrorHandler,
 } from '../../../domain/interfaces';
 import UserCredentials from '../../../domain/entities/user/user.credentials';
+import TYPES from '../../inversify/types';
 
 @injectable()
 export default class UserCredentialsRepository
   implements IUserCredentialsRepository
 {
   constructor(
-    @inject('IMainRepository') private mainRepository: IMainRepository,
-    @inject('IErrorHandler') private errorHandler: IErrorHandler,
+    @inject(TYPES.IMainRepository) private mainRepository: IMainRepository,
+    @inject(TYPES.IErrorHandler) private errorHandler: IErrorHandler,
   ) {}
 
   async saveUserCredentials(credentials: UserCredentials): Promise<void> {

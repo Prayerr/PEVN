@@ -1,6 +1,6 @@
 export interface IUser {
   readonly userId: string;
-  readonly registrationDate: string;
+  readonly registrationDate?: string;
   username: string;
   email: string;
   avatarURL?: string;

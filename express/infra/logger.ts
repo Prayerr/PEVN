@@ -1,11 +1,14 @@
 import { createLogger, format, transports } from 'winston';
 import { ILogger } from '../domain/interfaces/infra';
 import { injectable } from 'inversify';
+import { fileURLToPath } from 'node:url';
 import schedule from 'node-schedule';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-const dirLogs = path.join(import.meta.dirname, '../../logs');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const dirLogs = path.join(__dirname, '../../logs');
 
 @injectable()
 export default class Logger implements ILogger {
