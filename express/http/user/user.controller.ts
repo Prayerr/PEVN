@@ -14,33 +14,41 @@ import {
   IUserCredentialsRepository,
   IUserCreateService,
   IAuthService,
+  IUserMiddleware,
 } from '../../domain/interfaces';
-import IUserDTO from '../../app/dtos/user';
+import { IUserDTO, IUserPublicDTO } from '../../app/dtos/user';
 import TYPES from '../../infra/inversify/types';
 
+// TODO: Миддлвары применить
 @controller('/profile')
 export default class UserProfileController {
   constructor(
-    @inject(TYPES.IUserCreateService)
-    private userCreationService: IUserCreateService,
     @inject(TYPES.IUserRepository) private userRepository: IUserRepository,
     @inject(TYPES.IAuthService) private authService: IAuthService,
+
+    @inject(TYPES.IUserCreateService)
+    private userCreationService: IUserCreateService,
+    @inject(TYPES.IUserMiddleware)
+    private userMiddleware: IUserMiddleware,
     @inject(TYPES.IUserCredentialsRepository)
     private userCredentialsRepository: IUserCredentialsRepository,
   ) {}
 
-  /*private formatUserForResponse(user: IUserDTO, currentUser: IUserDTO): IUserDTO | (IPublicUser & { isMyProfile: boolean }) {
-      const isMyProfile = currentUser && currentUser.userId === user.userId;
-      return isMyProfile
-        ? { ...user, isMyProfile: true }
-        : {
-            name: user.name,
-            registrationDate: user.registrationDate ?? '',
-            avatarURL: user.avatarURL ?? null,
-            bio: user.bio ?? null,
-            isMyProfile: false,
-          };
-    } */
+  private formatUserForResponse(
+    user: IUserDTO,
+    currentUser: IUserDTO,
+  ): IUserDTO | (IUserPublicDTO & { isMyProfile: boolean }) {
+    const isMyProfile = currentUser && currentUser.userId === user.userId;
+    return isMyProfile
+      ? { ...user, isMyProfile: true }
+      : {
+          name: user.name,
+          registrationDate: user.registrationDate,
+          avatarURL: user.avatarURL ?? null,
+          bio: user.bio ?? null,
+          isMyProfile: false,
+        };
+  }
 
   @httpPost('/register')
   async createUser(
@@ -70,7 +78,7 @@ export default class UserProfileController {
           .status(409)
           .json({ error: 'Данный email или имя пользователя уже занято' });
       } else {
-        res.status(500).json({ error: 'Ошибка при создании пользователя' });
+        console.error(error);
       }
     }
   }
@@ -164,19 +172,19 @@ export default class UserProfileController {
   ): Promise<void> {
     try {
       const { username } = req.params;
-      //const currentUser = req.user;
+      const currentUser = req.user;
 
       const user = await this.userRepository.getUser(username, null);
 
-      //const formattedUser = this.formatUserForResponse(user, currentUser);
+      const formattedUser = this.formatUserForResponse(user, currentUser);
 
-      res.json({ user: user });
+      res.json({ user: formattedUser });
     } catch (error) {
       res.status(500).json({ error: 'Ошибка при получении пользователя' });
     }
   }
 
-  /* @httpPost('/refresh')
+  @httpPost('/refresh')
   async refreshTokens(
     @request() req: Request,
     @response() res: Response,
@@ -190,6 +198,6 @@ export default class UserProfileController {
       res.json(tokens);
     } catch (error) {
       res.status(500).json({ error: 'Ошибка при обновлении токенов' });
-    } 
-  } */
+    }
+  }
 }

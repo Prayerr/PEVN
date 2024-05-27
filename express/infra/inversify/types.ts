@@ -8,6 +8,7 @@ const TYPES = {
   ITokenService: Symbol.for('ITokenService'),
   IAuthService: Symbol.for('IAuthService'),
   IUserCreateService: Symbol.for('IUserCreateService'),
+  IUserMiddleware: Symbol.for('IUserMiddleware'),
   UserProfileController: Symbol.for('UserProfileController'),
 };
 

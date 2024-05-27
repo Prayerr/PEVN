@@ -1,9 +1,10 @@
-import { IErrorHandler, ILogger } from '../domain/interfaces/infra';
+import { IErrorHandler, ILogger } from '../domain/interfaces';
+import TYPES from './inversify/types';
 import { injectable, inject } from 'inversify';
 
 @injectable()
 export default class ErrorHandler implements IErrorHandler {
-  constructor(@inject('ILogger') private logger: ILogger) {}
+  constructor(@inject(TYPES.ILogger) private logger: ILogger) {}
 
   errorHandler(error: unknown, errorMessage: string): never {
     if (error instanceof Error) {

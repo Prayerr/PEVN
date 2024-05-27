@@ -1,4 +1,3 @@
-// src/infra/inversify/container.config.ts
 import { Container } from 'inversify';
 import { TYPE } from 'inversify-express-utils';
 import TYPES from './types';
@@ -12,6 +11,7 @@ import {
   ITokenService,
   IAuthService,
   IUserCreateService,
+  IUserMiddleware,
 } from '../../domain/interfaces';
 
 import Logger from '../logger';
@@ -23,6 +23,7 @@ import UserCredentialsRepository from '../repositories/user/user.credentials.rep
 import TokenService from '../../app/services/user/token';
 import AuthService from '../../app/services/user/auth';
 import UserCreateService from '../../app/services/user/user.create';
+import UserMiddleware from '../../http/user/user.middleware';
 import UserProfileController from '../../http/user/user.controller';
 
 const container = new Container();
@@ -64,6 +65,12 @@ container
 container
   .bind<IAuthService>(TYPES.IAuthService)
   .to(AuthService)
+  .inSingletonScope();
+
+// Миддлвары
+container
+  .bind<IUserMiddleware>(TYPES.IUserMiddleware)
+  .to(UserMiddleware)
   .inSingletonScope();
 
 // Контроллеры

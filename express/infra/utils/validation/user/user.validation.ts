@@ -2,7 +2,7 @@ import localize from 'ajv-i18n';
 import addFormats from 'ajv-formats';
 import Ajv, { ErrorObject } from 'ajv';
 import userSchema from './schema';
-import IUserDTO from '../../../../app/dtos/user';
+import { IUserDTO } from '../../../../app/dtos/user';
 
 const ajv = new Ajv();
 addFormats(ajv);

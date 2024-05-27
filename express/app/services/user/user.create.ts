@@ -6,8 +6,8 @@ import {
   IUserCredentialsRepository,
   IUserRepository,
 } from '../../../domain/interfaces';
+import { IUserDTO } from '../../dtos/user';
 import TYPES from '../../../infra/inversify/types';
-import IUserDTO from '../../dtos/user';
 import User from '../../../domain/entities/user/user';
 import UserSession from '../../../domain/entities/user/user.session';
 import UserCredentials from '../../../domain/entities/user/user.credentials';

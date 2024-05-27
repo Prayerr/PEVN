@@ -1,5 +1,5 @@
 import { JSONSchemaType } from 'ajv';
-import IUserDTO from '../../../../app/dtos/user';
+import { IUserDTO } from '../../../../app/dtos/user';
 
 // JSON схема для пользователя
 const userSchema: JSONSchemaType<IUserDTO> = {

@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import { ILogger } from '../domain/interfaces/infra';
+import { ILogger } from '../domain/interfaces';
 import { injectable } from 'inversify';
 import { fileURLToPath } from 'node:url';
 import schedule from 'node-schedule';
@@ -8,6 +8,7 @@ import fs from 'node:fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 const dirLogs = path.join(__dirname, '../../logs');
 
 @injectable()

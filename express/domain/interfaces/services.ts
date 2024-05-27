@@ -1,4 +1,4 @@
-import IUserDTO from '../../app/dtos/user';
+import { IUserDTO } from '../../app/dtos/user';
 
 export interface ITokenPayload {
   userId: string;
