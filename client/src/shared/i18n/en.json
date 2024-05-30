@@ -1,0 +1,34 @@
+{
+  "new": "NEW?",
+  "createAccount": "CREATE ACCOUNT",
+  "forgotPassword": "forgot password?",
+  "signIn": "SIGN IN",
+  "login": "login",
+  "email": "Email",
+  "password": "Password",
+  "terms": "TERMS",
+  "username": "Username",
+  "passwordConfirm": "Password confirm",
+  "next": "NEXT",
+  "bio": "Bio",
+  "direction": "Direction",
+
+  "directions": {
+    "programming": "Programming",
+    "design": "Design",
+    "information security": "Information security",
+    "microelectronics": "Microelectronics",
+    "media": "Media",
+    "other": "Other"
+  },
+
+  "errors": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email",
+    "passwordRequired": "Password is required",
+    "passwordShort": "Password is too short",
+    "usernameRequired": "Username is required",
+    "usernameShort": "Username is too short",
+    "usernameInvalid": "Please enter a username email"
+  }
+}

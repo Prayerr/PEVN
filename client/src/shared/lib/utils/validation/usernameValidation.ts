@@ -1,11 +1,13 @@
 import { usernameRegex } from '../../common/regexes';
 
-export default function inputUsernameValidate(value: string) {
+export default function inputUsernameValidate(
+  value: string,
+  t: (key: string) => string,
+) {
   if (!value) {
-    return 'Имя пользователя обязательно';
-  } else if (!usernameRegex.test(value))
-    return 'Введите корректное имя пользователя';
-  else if (value.length < 3) return 'Имя пользователя слишком короткое';
+    return t('errors.usernameRequired');
+  } else if (!usernameRegex.test(value)) return t('errors.usernameInvalid');
+  else if (value.length < 3) return t('errors.usernameShort');
 
   return '';
 }

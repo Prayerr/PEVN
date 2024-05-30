@@ -9,17 +9,16 @@
 }
 
 @mixin button-registration-submit {
-  font-size: var(--size__font-xxl);
+  font-size: var(--size__font-large);
   background:
     linear-gradient(rgba(7, 16, 9), rgba(7, 16, 9)) padding-box,
     var(--gradient__BlueRed) border-box;
   border: 10px solid transparent;
   border-radius: 100px;
-  width: 330px;
-  height: 100px;
+  padding: 0 1%;
 
   span {
-    font-size: var(--size__font-xxl);
+    font-size: var(--size__font-large);
     background: var(--gradient__BlueRed);
     font-weight: 800;
     text-align: center;

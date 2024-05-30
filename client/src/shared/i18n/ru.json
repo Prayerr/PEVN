@@ -1,0 +1,34 @@
+{
+  "new": "ВПЕРВЫЕ?",
+  "createAccount": "СОЗДАТЬ АККАУНТ",
+  "forgotPassword": "Забыли пароль?",
+  "signIn": "Авторизация",
+  "login": "Войти",
+  "email": "Электронная почта",
+  "password": "Пароль",
+  "terms": "УСЛОВИЯ ПОЛЬЗОВАНИЯ",
+  "username": "Имя пользователя",
+  "passwordConfirm": "Подтверждение пароля",
+  "next": "Продолжить",
+  "bio": "О себе",
+  "direction": "Направления",
+
+  "directions": {
+    "programming": "Программирование",
+    "design": "Дизайн",
+    "information security": "Информационная безопасность",
+    "microelectronics": "Микроэлектроника",
+    "media": "Медиа",
+    "other": "Другое"
+  },
+
+  "errors": {
+    "emailRequired": "Электронная почта обязательна",
+    "emailInvalid": "Введите корректную электронную почту",
+    "passwordRequired": "Пароль обязателен",
+    "passwordShort": "Слишком короткий пароль",
+    "usernameRequired": "Имя пользователя обязательно",
+    "usernameInvalid": "Введите корректное имя пользователя",
+    "usernameShort": "Слишком короткое имя пользователя"
+  }
+}

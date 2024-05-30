@@ -1,10 +1,9 @@
 <template>
-  <RegistrationForm2 />
+  <RegistrationForm />
 </template>
 
 <script setup lang="ts">
-//import RegistrationForm1 from '@/features/auth/Registration/RegistrationForm1.vue';
-import RegistrationForm2 from '@/features/auth/Registration/RegistrationForm2.vue';
+import RegistrationForm from '@/features/auth/Registration/ui/RegistrationForm.vue';
 </script>
 
 <style lang="scss"></style>

@@ -1,8 +1,8 @@
 <template>
   <VRouterLink
-    link="/forgot"
-    :linkText="$t('forgotPassword')"
-    linkClass="linkForgotPassword"
+    link="/registration"
+    :linkText="$t('createAccount')"
+    linkClass="linkRegistration"
   />
 </template>
 
@@ -13,14 +13,9 @@ import VRouterLink from '../Main/VRouterLink.vue';
 <style lang="scss">
 @import '../../../app/styles/main.scss';
 
-.linkForgotPassword {
-  font-weight: 700;
-  margin-top: 20px;
-  color: var(--color__typography-light);
+.linkRegistration {
   font-size: var(--size__font-medium);
-
-  &:hover {
-    @include link-hover;
-  }
+  color: var(--color__accepted);
+  font-weight: 900;
 }
 </style>

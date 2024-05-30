@@ -51,6 +51,7 @@ const onBlur = () => {
 .input {
   display: flex;
   flex-direction: column;
+  width: 100%;
   margin: 10px;
 
   .input__label {
@@ -64,7 +65,6 @@ const onBlur = () => {
     background-color: var(--color__primary);
     color: var(--color__typography-light);
     border-radius: 15px;
-    width: 100%;
     padding: 12px;
 
     &:hover,

@@ -3,4 +3,5 @@ export type TUserDirection =
   | 'Design'
   | 'Information security'
   | 'Microelectronics'
-  | 'Media';
+  | 'Media'
+  | 'Other';

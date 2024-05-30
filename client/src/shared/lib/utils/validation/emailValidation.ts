@@ -1,10 +1,12 @@
 import { emailRegex } from '../../common/regexes';
 
-export default function inputEmailValidate(value: string) {
+export default function inputEmailValidate(
+  value: string,
+  t: (key: string) => string,
+) {
   if (!value) {
-    return 'Электронная почта обязательна';
-  } else if (!emailRegex.test(value))
-    return 'Введите корректную электронную почту';
+    return t('errors.emailRequired');
+  } else if (!emailRegex.test(value)) return t('errors.emailInvalid');
 
   return '';
 }

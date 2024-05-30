@@ -1,5 +1,5 @@
 <template>
-  <VForm buttonSubmitText="next" buttonClass="button-registration">
+  <VForm :buttonSubmitText="$t('next')" buttonClass="button-registration">
     <InputUsername />
     <InputEmail />
     <InputPassword />
@@ -16,7 +16,7 @@ import InputPasswordConfirm from '@/shared/ui/Inputs/InputPasswordConfirm.vue';
 </script>
 
 <style lang="scss">
-@import '../../../app/styles/main.scss';
+@import '../../../../../app/styles/main.scss';
 
 .button-registration {
   @include button-registration-submit;

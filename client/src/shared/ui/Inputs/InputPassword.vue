@@ -1,7 +1,7 @@
 <template>
   <VInput
     v-model="password"
-    label="password"
+    :label="$t('password')"
     name="password"
     inputType="password"
     required

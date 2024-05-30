@@ -1,5 +1,5 @@
 <template>
-  <VRouterLink link="/terms" linkText="TERMS" linkClass="linkTerms" />
+  <VRouterLink link="/terms" :linkText="$t('terms')" linkClass="linkTerms" />
 </template>
 
 <script setup lang="ts">

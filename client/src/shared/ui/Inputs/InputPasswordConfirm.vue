@@ -1,7 +1,7 @@
 <template>
   <VInput
     v-model="passwordConfirm"
-    label="password confirm"
+    :label="$t('passwordConfirm')"
     name="password confirm"
     inputType="password"
     required

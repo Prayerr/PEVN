@@ -1,6 +1,6 @@
 <template>
-  <VForm buttonSubmitText="login" buttonClass="button-login">
-    <span class="form__text">SIGN IN</span>
+  <VForm :buttonSubmitText="$t('login')" buttonClass="button-login">
+    <span class="form__text">{{ $t('signIn') }}</span>
     <InputEmail />
     <InputPassword />
     <template #after-button-submit>
@@ -17,15 +17,15 @@ import LinkForgotPassword from '@/shared/ui/Links/LinkForgotPassword.vue';
 </script>
 
 <style lang="scss">
-@import '../../app/styles/main.scss';
+@import '../../../app/styles/main.scss';
 
 .button-login {
   border: 10px solid var(--color__accepted);
   color: var(--color__accepted);
   background-color: transparent;
   border-radius: 100px;
-  width: 270px;
-  height: 85px;
+  padding: 0 10%;
+
   span {
     font-size: var(--size__font-large);
     font-weight: 900;
