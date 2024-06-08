@@ -1,31 +1,35 @@
 :root {
-  // Цвета (Не применять)
-  --color__red: #ff0000;
-  --color__azure: #41ddff;
-  --color__blue: #4e31ff;
-  --color__green: #23e304;
-  --color__grey: #071013;
-  --color__grey-light: #112a33;
-  --color__white: #ffffff;
+  --color__primary: #071013;
+  --color__primary-light: #112a33;
+  --color__hover-light: #112a33;
+  --color__error: #ff0000;
+  --color__error-dark: #300000;
+  --color__light: #ffffff;
+  --color__typography-light: #ffffff;
   --color__black: #000000;
+  --color__typography-black: #000000;
+  --color__accepted: #23e304;
+  --color__hover: #4e31ff;
+  --color__disabled: #808080;
+  --color__disabled-light: #c1c1c1;
 
-  --color__primary: var(--color__grey);
-  --color__error: var(--color__red);
-  --color__light: var(--color__white);
-  --color__black: var(--color__black);
-  --color__accepted: var(--color__green);
-  --color__input-border: var(--color__white);
-  --color__typography-light: var(--color__white);
-  --color__typography-black: var(--color__black);
-  --color__hover: var(--color__blue);
-  --color__hover-light: var(--color__grey-light);
+  // Кнопки
+  --color__button-border: #ffffff;
 
-  --gradient__AzureBlue: linear-gradient(
-    90deg,
-    var(--color__azure) 0.45%,
-    var(--color__blue) 52.76%
-  );
-  --gradient__BlueRed: linear-gradient(90deg, #4e31ff 0%, #f00 100%);
+  // Инпуты
+  --color__input-border: #ffffff;
+  --color__input-background: #071013;
+
+  --color__input-border-error: #d00000;
+  --color__input-text-error: #ff0000;
+  --color__input-background-error: #300000;
+
+  --color__input-border-focus: #3e3e3e;
+  --color__input-background-focus: #040a0c;
+
+  --color__input-background-hover: #112a33;
+
+  --gradient__AzureBlue: linear-gradient(90deg, #41ddff 0.45%, #4e31ff 52.76%);
 
   // Размеры
   --size__font-input: 24px;

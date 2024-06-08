@@ -1,13 +1,23 @@
 <template>
-  <div class="v-dropdown">
-    <button @click="toggleDropdown" class="v-dropdown-button">
+  <div class="dropdown">
+    <button class="dropdown__button" type="button" @click="toggleDropdown">
       {{ modelValue }}
-      <IconArrow :class="['v-dropdown-icon', { 'rotate-icon': isOpen }]" />
+      <IconArrow
+        :class="['dropdown__icon', { 'dropdown__icon--rotated': isOpen }]"
+      />
     </button>
-    <div v-if="isOpen" class="v-dropdown-menu">
-      <ul class="v-dropdown-list">
-        <li v-for="(item, index) in items" :key="index">
-          <button class="v-dropdown-item" @click="selectItem(item)">
+    <div v-if="isOpen" class="dropdown__menu">
+      <ul class="dropdown__list">
+        <li
+          v-for="(item, index) in items"
+          :key="index"
+          class="dropdown__list-item"
+        >
+          <button
+            class="dropdown__item"
+            type="button"
+            @click="selectItem(item)"
+          >
             {{ item }}
           </button>
         </li>
@@ -21,11 +31,13 @@ import { ref } from 'vue';
 import IconArrow from '../../Icons/IconArrow.vue';
 
 interface VDropdown {
-  modelValue: string;
   items: string[];
 }
 
-const emit = defineEmits(['update:modelValue']);
+defineProps<VDropdown>();
+
+const modelValue = defineModel<string>('modelValue', { default: '' });
+
 const isOpen = ref(false);
 
 const toggleDropdown = () => {
@@ -33,22 +45,19 @@ const toggleDropdown = () => {
 };
 
 const selectItem = (item: string) => {
-  emit('update:modelValue', item);
+  modelValue.value = item;
   isOpen.value = false;
 };
-
-defineProps<VDropdown>();
 </script>
 
 <style lang="scss">
 @import '../../../../app/styles/main.scss';
 
-.v-dropdown {
+.dropdown {
   position: relative;
   display: inline-block;
-  font-weight: 600;
 
-  .v-dropdown-button {
+  &__button {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -57,39 +66,43 @@ defineProps<VDropdown>();
     background-color: var(--color__primary);
     color: var(--color__typography-light);
     border: 5px solid var(--color__light);
-    padding: 3% 5%;
-    border-radius: 15px;
+    padding: 10px 15px;
+    border-radius: 10px;
     cursor: pointer;
   }
 
-  .v-dropdown-icon {
-    margin-left: 200px;
+  &__icon {
+    margin-left: 10px;
     transition: transform 0.3s ease;
   }
 
-  .rotate-icon {
+  &__icon--rotated {
     transform: rotate(180deg);
   }
-  .v-dropdown-menu {
+
+  &__menu {
     position: absolute;
     top: 100%;
     left: 0;
     z-index: 999;
     background-color: var(--color__primary);
-    border: 1px solid var(--color__light);
+    border: 2px solid var(--color__light);
     color: var(--color__light);
-    min-width: 400px;
+    min-width: 200px;
     margin-top: 5px;
     padding: 0;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   }
 
-  .v-dropdown-list {
+  &__list {
     list-style: none;
     padding: 0;
     margin: 0;
+  }
 
-    .v-dropdown-item {
+  &__list-item {
+    .dropdown__item {
+      font-weight: 600;
       width: 100%;
       padding: 10px;
       background: none;

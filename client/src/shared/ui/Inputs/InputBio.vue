@@ -1,18 +1,17 @@
 <template>
   <VInput
-    v-model="bio"
+    v-model="inputBioValue"
+    class="input-bio"
+    inputType="text"
     :label="$t('bio')"
     name="bio"
-    inputType="text"
-    class="input-bio"
   />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import VInput from '../Main/VInput.vue';
 
-const bio = ref<string>('');
+const inputBioValue = defineModel('inputBioValue');
 </script>
 
 <style lang="scss">

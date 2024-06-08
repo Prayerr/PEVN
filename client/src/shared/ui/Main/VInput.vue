@@ -1,15 +1,22 @@
 <template>
   <div class="input">
-    <label v-if="label" :for="name" class="input__label">{{ label }}</label>
+    <label
+      v-if="label"
+      :class="['input__label', { 'input__label-error': error }]"
+      :for="name"
+    >
+      {{ label }}
+    </label>
     <input
-      class="input__field"
-      ref="input"
-      :value="modelValue"
-      :type="inputType"
-      :name="name"
-      :disabled="isDisabled"
+      v-model="modelValue"
       autocomplete="off"
-      @input="onInput"
+      :class="['input__field', { 'input__field-error': error }]"
+      :disabled="isDisabled"
+      :maxlength="maxLength"
+      :minlength="minLength"
+      :name="name"
+      :required="isRequired"
+      :type="inputType"
       @blur="onBlur"
     />
     <small v-if="error" class="input__error">{{ error }}</small>
@@ -17,32 +24,35 @@
 </template>
 
 <script setup lang="ts">
+import { inject } from 'vue';
 import type { TInputType } from '@/shared/lib';
 
 interface IVInput {
-  modelValue?: string;
   label?: string;
   inputType?: TInputType;
   name?: string;
   isDisabled?: boolean;
+  isRequired?: boolean;
   error?: string;
 }
 
-const props = withDefaults(defineProps<IVInput>(), {
-  inputType: 'text',
-});
+defineProps<IVInput>();
 
-const emit = defineEmits(['update:modelValue', 'blur']);
+const modelValue = defineModel<string>('modelValue', { default: '' });
 
-// Обработчик ввода
-const onInput = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.value);
-};
+const emit = defineEmits(['blur']);
 
 const onBlur = () => {
-  emit('blur', props.modelValue);
+  emit('blur', modelValue.value);
 };
+
+const minMaxLength = inject<{ min: number; max: number }>('minMaxLength', {
+  min: 0,
+  max: 64,
+});
+
+const minLength = minMaxLength.min;
+const maxLength = minMaxLength.max;
 </script>
 
 <style lang="scss">
@@ -54,26 +64,50 @@ const onBlur = () => {
   width: 100%;
   margin: 10px;
 
-  .input__label {
+  &__label {
     color: var(--color__typography-light);
     font-size: var(--size__font-input);
     font-weight: 700;
-  }
 
-  .input__field {
-    border: 5px solid var(--color__input-border);
-    background-color: var(--color__primary);
-    color: var(--color__typography-light);
-    border-radius: 15px;
-    padding: 12px;
-
-    &:hover,
-    &:focus {
-      @include input-hover;
+    &-error {
+      color: var(--color__input-border-error);
     }
   }
 
-  .input__error {
+  &__field {
+    border: 5px solid var(--color__input-border);
+    background-color: var(--color__input-background);
+    color: var(--color__typography-light);
+    font-weight: 600;
+    border-radius: 15px;
+    padding: 12px;
+    transition:
+      background-color 0.2s ease-in-out,
+      border-color 0.2s ease-in-out;
+
+    &:hover {
+      @include input-hover;
+      outline: none;
+    }
+
+    &:focus {
+      @include input-focus;
+      outline: none;
+    }
+
+    &-error {
+      @include input-error;
+
+      &:hover,
+      &:focus {
+        background-color: var(--color__input-background-error);
+        border-color: var(--color__input-border-error);
+      }
+    }
+  }
+
+  &__error {
+    font-weight: 500;
     color: var(--color__error);
   }
 }

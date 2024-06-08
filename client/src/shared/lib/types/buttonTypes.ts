@@ -1,4 +1,1 @@
-export type TButtonSubmitClass =
-  | 'button-login'
-  | 'button-registration'
-  | 'button-registration-final';
+export type TButtonType = 'button' | 'submit' | 'reset';

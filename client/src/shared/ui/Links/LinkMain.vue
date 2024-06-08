@@ -1,5 +1,5 @@
 <template>
-  <VRouterLink link="/" linkText="IT.NXT" linkClass="linkMain" />
+  <VRouterLink link="/" linkClass="linkMain" linkText="IT.NXT" />
 </template>
 
 <script setup lang="ts">

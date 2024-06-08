@@ -1,32 +1,31 @@
 <template>
   <VInput
-    v-model="username"
+    v-model="inputUsernameValue"
+    :error="error"
+    inputType="text"
+    :isRequired="true"
     :label="$t('username')"
     name="username"
-    inputType="text"
-    :error="error"
     @blur="validateInput"
   />
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { provide } from 'vue';
 import VInput from '../Main/VInput.vue';
+import useInputValidation from '@/shared/lib/use/useInputValidate';
 import inputUsernameValidate from '@/shared/lib/utils/validation/usernameValidation';
 
-const username = ref<string>('');
-const error = ref<string>('');
-const { t } = useI18n();
-
-// Валидация
-const validateInput = () => {
-  error.value = inputUsernameValidate(username.value, t);
-};
-
-watch(username, (newValue) => {
-  error.value = inputUsernameValidate(newValue, t);
+const inputUsernameValue = defineModel<string>('inputUsernameValue', {
+  default: '',
 });
+
+const { error, validateInput } = useInputValidation(
+  inputUsernameValue,
+  inputUsernameValidate,
+);
+
+provide('minMaxLength', { min: 3 });
 </script>
 
 <style lang="scss"></style>

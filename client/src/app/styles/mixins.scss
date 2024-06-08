@@ -1,6 +1,17 @@
 @mixin input-hover {
-  background-color: var(--color__grey-light);
+  background-color: var(--color__input-background-hover);
   transition: background-color 0.2s ease-in-out;
+}
+
+@mixin input-focus {
+  background-color: var(--color__input-background-focus);
+  border-color: var(--color__input-border-focus);
+}
+
+@mixin input-error {
+  color: var(--color__input-text-error);
+  background-color: var(--color__input-background-error);
+  border-color: var(--color__input-border-error);
 }
 
 @mixin link-hover {
@@ -9,22 +20,14 @@
 }
 
 @mixin button-registration-submit {
-  font-size: var(--size__font-large);
-  background:
-    linear-gradient(rgba(7, 16, 9), rgba(7, 16, 9)) padding-box,
-    var(--gradient__BlueRed) border-box;
-  border: 10px solid transparent;
-  border-radius: 100px;
-  padding: 0 1%;
+  border: 10px solid var(--color__light);
+  border-radius: 35px;
+  padding: 0.3% 2%;
 
   span {
     font-size: var(--size__font-large);
-    background: var(--gradient__BlueRed);
     font-weight: 800;
     text-align: center;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 }
 

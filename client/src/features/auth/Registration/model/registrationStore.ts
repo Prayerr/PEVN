@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { TUserDirection } from '@/shared/lib/types/userTypes';
 
-interface RegistrationState {
+interface RegistrationStore {
   step: number;
 
   accountInfo: {
@@ -13,7 +13,7 @@ interface RegistrationState {
 
   aboutYou: {
     bio: string;
-    birthday: string;
+    birthday: Date;
     direction: TUserDirection;
   };
 
@@ -22,8 +22,8 @@ interface RegistrationState {
   };
 }
 
-export const useRegistrationStore = defineStore('registration', {
-  state: (): RegistrationState => ({
+const useRegistrationStore = defineStore('registration', {
+  state: (): RegistrationStore => ({
     step: 0,
 
     accountInfo: {
@@ -35,7 +35,7 @@ export const useRegistrationStore = defineStore('registration', {
 
     aboutYou: {
       bio: '',
-      birthday: '',
+      birthday: new Date(2000, 0, 1),
       direction: 'Other',
     },
 
@@ -46,13 +46,31 @@ export const useRegistrationStore = defineStore('registration', {
 
   actions: {
     nextStep() {
-      if (this.step < 3) {
-        this.step++;
+      if (this.step < 2) {
+        this.step += 1;
       }
     },
 
     setStep(step: number) {
       this.step = step;
     },
+
+    setAccountInfo(data: Partial<RegistrationStore['accountInfo']>) {
+      this.accountInfo = { ...this.accountInfo, ...data };
+    },
+
+    setAboutYou(data: Partial<RegistrationStore['aboutYou']>) {
+      this.aboutYou = { ...this.aboutYou, ...data };
+    },
+
+    setAdditionally(data: Partial<RegistrationStore['additionally']>) {
+      this.additionally = { ...this.additionally, ...data };
+    },
+
+    completeRegistration() {
+      console.log('Конец регистрации ( dev)');
+    },
   },
 });
+
+export default useRegistrationStore;

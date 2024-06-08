@@ -1,25 +1,46 @@
 <template>
-  <form class="form">
+  <form ref="formElement" class="form" @submit.prevent="handlerSubmit">
     <LinkMain />
     <slot></slot>
-    <VButtonSubmit :text="buttonSubmitText" :buttonClass="buttonClass" />
+    <VButton
+      :class="buttonClass"
+      :text="buttonSubmitText"
+      :type="buttonFormType"
+      @click="handlerButtonClick"
+    />
     <slot name="after-button-submit"></slot>
   </form>
 </template>
 
 <script setup lang="ts">
-import VButtonSubmit from './Buttons/VButtonSubmit.vue';
+import { ref } from 'vue';
+import VButton from './Buttons/VButton.vue';
 import LinkMain from '../Links/LinkMain.vue';
-import type { TButtonSubmitClass } from '@/shared/lib/types/buttonTypes';
+import type { TButtonType } from '@/shared/lib/types/buttonTypes';
 
 interface IVForm {
   buttonSubmitText?: string;
-  buttonClass: TButtonSubmitClass;
+  buttonClass: string;
+  buttonFormType: TButtonType;
 }
 
 withDefaults(defineProps<IVForm>(), {
   buttonSubmitText: '',
 });
+
+const emit = defineEmits(['submit', 'buttonClick']);
+
+const formElement = ref<HTMLFormElement | null>(null);
+
+function handlerSubmit(event: Event) {
+  emit('submit', event);
+}
+
+function handlerButtonClick(event: Event) {
+  if (formElement.value?.reportValidity()) {
+    emit('buttonClick', event);
+  }
+}
 </script>
 
 <style lang="scss">

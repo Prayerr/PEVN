@@ -1,26 +1,26 @@
 <template>
   <div class="birthday-selector">
     <button
-      class="birthday-selector__button"
       aria-label="Select day"
-      @wheel="changeValue('day', $event)"
+      class="birthday-selector__button"
       @keydown="keyChange('day', $event)"
+      @wheel="changeValue('day', $event)"
     >
       <span class="birthday-selector__value">{{ day }}</span>
     </button>
     <button
-      class="birthday-selector__button"
       aria-label="Select month"
-      @wheel="changeValue('month', $event)"
+      class="birthday-selector__button"
       @keydown="keyChange('month', $event)"
+      @wheel="changeValue('month', $event)"
     >
       <span class="birthday-selector__value">{{ monthName }}</span>
     </button>
     <button
-      class="birthday-selector__button"
       aria-label="Select year"
-      @wheel="changeValue('year', $event)"
+      class="birthday-selector__button"
       @keydown="keyChange('year', $event)"
+      @wheel="changeValue('year', $event)"
     >
       <span class="birthday-selector__value">{{ year }}</span>
     </button>
@@ -67,20 +67,17 @@ const ensureDateBoundaries = (newDate: Date): Date => {
   return newDate;
 };
 
-// TODO Отрефакторить?
+const updateFunctions: Record<string, (date: Date, delta: number) => void> = {
+  day: (date, delta) => date.setDate(date.getDate() + delta),
+  month: (date, delta) => date.setMonth(date.getMonth() + delta),
+  year: (date, delta) => date.setFullYear(date.getFullYear() + delta),
+};
+
 const updateValue = (type: string, delta: number) => {
   const newDate = new Date(date.value);
 
-  switch (type) {
-    case 'day':
-      newDate.setDate(newDate.getDate() + delta);
-      break;
-    case 'month':
-      newDate.setMonth(newDate.getMonth() + delta);
-      break;
-    case 'year':
-      newDate.setFullYear(newDate.getFullYear() + delta);
-      break;
+  if (updateFunctions[type]) {
+    updateFunctions[type](newDate, delta);
   }
 
   date.value = ensureDateBoundaries(newDate);
@@ -91,7 +88,6 @@ const changeValue = (type: string, event: WheelEvent) => {
   updateValue(type, delta);
 };
 
-// Изменение даты при нажатии на клавиши (Для a11y полезно)
 const keyChange = (type: string, event: KeyboardEvent): void => {
   const increaseKeys: string[] = ['ArrowUp', 'E', 'e', 'У', 'у'];
   const decreaseKeys: string[] = ['ArrowDown', 'Q', 'q', 'Й', 'й'];

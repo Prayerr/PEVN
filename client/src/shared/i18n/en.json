@@ -9,9 +9,14 @@
   "terms": "TERMS",
   "username": "Username",
   "passwordConfirm": "Password confirm",
-  "next": "NEXT",
+  "continue": "Continue",
   "bio": "Bio",
   "direction": "Direction",
+  "pleaseEnterYourAvatar": "Please enter your avatar",
+  "edit": "Edit",
+  "generate": "Generate",
+  "birthday": "Birthday",
+  "fileSizeError": "File size should not exceed 2MB",
 
   "directions": {
     "programming": "Programming",
@@ -30,5 +35,11 @@
     "usernameRequired": "Username is required",
     "usernameShort": "Username is too short",
     "usernameInvalid": "Please enter a username email"
+  },
+
+  "registrationSteps": {
+    "accountInfo": "Account info",
+    "aboutYou": "About you",
+    "additionally": "Additionally"
   }
 }

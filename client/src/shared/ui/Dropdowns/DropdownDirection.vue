@@ -6,11 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
+import useTranslateItems from '@/shared/lib/use/useTranslateItems';
 import VDropdown from '../Main/Dropdown/VDropdown.vue';
-
-const { t } = useI18n();
 
 const itemsDirections = [
   'directions.programming',
@@ -21,9 +19,7 @@ const itemsDirections = [
   'directions.other',
 ];
 
-const translatedItems = computed<string[]>(() =>
-  itemsDirections.map((key) => t(key)),
-);
+const translatedItems = useTranslateItems(itemsDirections);
 
 const selectedItem = ref<string>(translatedItems.value[5]);
 </script>

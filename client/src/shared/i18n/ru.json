@@ -9,9 +9,15 @@
   "terms": "УСЛОВИЯ ПОЛЬЗОВАНИЯ",
   "username": "Имя пользователя",
   "passwordConfirm": "Подтверждение пароля",
-  "next": "Продолжить",
+  "continue": "Далее",
   "bio": "О себе",
   "direction": "Направления",
+  "save": "Сохранить",
+  "pleaseEnterYourAvatar": "Укажите ваш аватар",
+  "edit": "Редактировать",
+  "generate": "Сгенерировать",
+  "birthday": "День рождения",
+  "fileSizeError": "Размер файла не должен превышать 2 МБ",
 
   "directions": {
     "programming": "Программирование",
@@ -30,5 +36,11 @@
     "usernameRequired": "Имя пользователя обязательно",
     "usernameInvalid": "Введите корректное имя пользователя",
     "usernameShort": "Слишком короткое имя пользователя"
+  },
+
+  "registrationSteps": {
+    "accountInfo": "Информация аккаунта",
+    "aboutYou": "О вас",
+    "additionally": "Дополнительно"
   }
 }

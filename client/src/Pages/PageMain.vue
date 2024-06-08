@@ -1,7 +1,9 @@
 <template>
-  <VButton text="edit" />
+  <MainNavbar />
 </template>
+
 <script setup lang="ts">
-import VButton from '../../Main/Buttons/VButton.vue';
+import MainNavbar from '@/widgets/MainNavbar.vue';
 </script>
+
 <style lang="scss"></style>

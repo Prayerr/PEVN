@@ -1,5 +1,6 @@
 <template>
-  <router-link :to="link" :class="['link', linkClass]">
+  <router-link :class="['link', linkClass]" :to="link">
+    <slot />
     {{ linkText }}
   </router-link>
 </template>
@@ -7,8 +8,8 @@
 <script setup lang="ts">
 interface IVRouterLink {
   link: string;
-  linkText: string;
-  linkClass: string;
+  linkText?: string;
+  linkClass?: string;
 }
 
 withDefaults(defineProps<IVRouterLink>(), {

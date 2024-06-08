@@ -1,6 +1,8 @@
-import type { shapePainter, backgroundPainter } from '../common/interfaces';
+import type {
+  shapePainter,
+  backgroundPainter,
+} from '../../../shared/lib/common/interfaces';
 
-// Генератор случайных цветов по HEX
 const generateRandomColor = (): string => {
   const hex = '0123456789ABCDEF';
   const hexPrefix = '#';

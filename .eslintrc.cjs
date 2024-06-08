@@ -13,4 +13,28 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+
+  plugins: ['vue'],
+
+  // TODO Доделать конфиг?
+  rules: {
+    'vue/attributes-order': [
+      'error',
+      {
+        order: [
+          'DEFINITION',
+          'LIST_RENDERING',
+          'CONDITIONALS',
+          'RENDER_MODIFIERS',
+          'GLOBAL',
+          ['UNIQUE', 'SLOT'],
+          'TWO_WAY_BINDING',
+          'OTHER_DIRECTIVES',
+          'OTHER_ATTR',
+          'EVENTS',
+        ],
+        alphabetical: true,
+      },
+    ],
+  },
 };

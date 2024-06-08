@@ -1,6 +1,6 @@
 import PageLogin from '@/pages/PageLogin.vue';
 import PageRegistration from '@/pages/PageRegistration.vue';
-import DropdownDirection from '@/shared/ui/Dropdowns/DropdownDirection.vue';
+import PageMain from '@/pages/PageMain.vue';
 
 const routes = [
   {
@@ -14,9 +14,13 @@ const routes = [
     component: PageLogin,
   },
   {
+    path: '/',
+    name: 'Main',
+    component: PageMain,
+  },
+  {
     path: '/temp',
     name: 'temp',
-    component: DropdownDirection,
   },
 ];
 
